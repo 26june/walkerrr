@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:walkerrr/models/user.dart';
 import 'package:walkerrr/services/apiConnection.dart';
 
 class Auth {
