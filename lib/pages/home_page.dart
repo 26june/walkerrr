@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
+import 'package:walkerrr/pages/steps_main_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -10,6 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final PageController controller = PageController();
+
   final User? user = Auth().currentUser;
 
   Future<void> signOut() async {
@@ -33,17 +36,14 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
 
-  void _onNavBarTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
-      Center(child: Icon(Icons.home_outlined, size: 150,)),
+      MainPedometer(), //Page 0
       Container(
+        // Page 1
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(20),
@@ -57,11 +57,20 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     ];
+
     return Scaffold(
       appBar: AppBar(
         title: _title(),
       ),
-      body: _pages.elementAt(_selectedIndex),
+      body: PageView(
+        controller: controller,
+        children: _pages,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         items: [
@@ -74,7 +83,12 @@ class _HomePageState extends State<HomePage> {
             label: "Setting",
           )
         ],
-        onTap: _onNavBarTap,
+        onTap: (index) {
+          controller.jumpToPage(index);    /// Switching the PageView tabs
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
