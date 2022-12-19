@@ -12,6 +12,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = "";
   bool isLogin = true;
+  bool _isVisible = true;
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
@@ -59,12 +60,22 @@ class _LoginPageState extends State<LoginPage> {
     TextEditingController controller,
   ) {
     return TextField(
-      obscureText: true,
+      obscureText: _isVisible,
       enableSuggestions: false,
       autocorrect: false,
       controller: controller,
       decoration: InputDecoration(
         labelText: title,
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isVisible ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              _isVisible = !_isVisible;
+            });
+          },
+        ),
       ),
     );
   }
@@ -79,6 +90,15 @@ class _LoginPageState extends State<LoginPage> {
             ? signInWithEmailAndPassword
             : createUserWithEmailAndPassword,
         child: Text(isLogin ? "Login" : "Register"));
+  }
+
+  Widget _clearForm() {
+    return TextButton(
+        onPressed: () {
+          _controllerEmail.clear();
+          _controllerPassword.clear();
+        },
+        child: Text("Clear form"));
   }
 
   Widget _loginOrRegisterButton() {
@@ -97,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: _title(),
       ),
-
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -111,6 +130,7 @@ class _LoginPageState extends State<LoginPage> {
             _errorMessage(),
             _submitButton(),
             _loginOrRegisterButton(),
+            _clearForm(),
           ],
         ),
       ),
