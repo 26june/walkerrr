@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+final baseAPI = 'https://walking.cyclic.app';
+
 Future<void> postUser(postedEmail, uid) async {
-  final url = Uri.http('192.168.0.47:9095', '/api/users');
+  final url = Uri.http(baseAPI, '/api/users');
   final response = await http.post(url,
       headers: {
         'Content-Type': 'application/json',
@@ -13,7 +15,7 @@ Future<void> postUser(postedEmail, uid) async {
 }
 
 Future<void> deleteUserDB(uid) async {
-  final url = Uri.http('192.168.0.47:9095', '/api/users/$uid');
+  final url = Uri.http(baseAPI, '/api/users/$uid');
   await http.delete(url, headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
