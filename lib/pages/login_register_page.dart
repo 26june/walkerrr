@@ -54,6 +54,21 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _entryFieldPassword(
+    String title,
+    TextEditingController controller,
+  ) {
+    return TextField(
+      obscureText: true,
+      enableSuggestions: false,
+      autocorrect: false,
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: title,
+      ),
+    );
+  }
+
   Widget _errorMessage() {
     return Text(errorMessage == "" ? "" : "Error: $errorMessage");
   }
@@ -92,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _entryField("email", _controllerEmail),
-            _entryField("password", _controllerPassword),
+            _entryFieldPassword("password", _controllerPassword),
             _errorMessage(),
             _submitButton(),
             _loginOrRegisterButton(),
