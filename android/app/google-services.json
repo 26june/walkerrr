@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "860506738800",
+    "project_id": "walkerrr-cfdb3",
+    "storage_bucket": "walkerrr-cfdb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860506738800:android:1bcfcd7d56636daa3864b5",
+        "android_client_info": {
+          "package_name": "com.example.walkerrr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860506738800-9ga9g2lr2egb6nuuqgjb38hptterop5p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBAm0twAFEm3MjTOY9nkKiqg6UNSpk3_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860506738800-9ga9g2lr2egb6nuuqgjb38hptterop5p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
