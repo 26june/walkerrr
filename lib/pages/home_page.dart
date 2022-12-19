@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final User? user = Auth().currentUser;
 
   Future<void> signOut() async {
@@ -26,13 +31,19 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  int _selectedIndex = 0;
+
+  void _onNavBarTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: _title(),
-      ),
-      body: Container(
+    List<Widget> _pages = <Widget>[
+      Center(child: Icon(Icons.home_outlined, size: 150,)),
+      Container(
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(20),
@@ -44,6 +55,26 @@ class HomePage extends StatelessWidget {
             _signOutButton(),
           ],
         ),
+      ),
+    ];
+    return Scaffold(
+      appBar: AppBar(
+        title: _title(),
+      ),
+      body: _pages.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_outlined),
+            label: "Setting",
+          )
+        ],
+        onTap: _onNavBarTap,
       ),
     );
   }
