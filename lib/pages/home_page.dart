@@ -19,6 +19,10 @@ class _HomePageState extends State<HomePage> {
     await Auth().signOut();
   }
 
+  Future<void> deleteUser() async {
+    showAlertDialog(context);
+  }
+
   Widget _title() {
     return const Text("Firebase Auth");
   }
@@ -34,14 +38,51 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _deleteUserButton() {
+    return ElevatedButton(
+      onPressed: deleteUser,
+      child: const Text("Delete Account"),
+    );
+  }
+
   int _selectedIndex = 0;
 
-
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = ElevatedButton(
+      child: const Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = ElevatedButton(
+      child: const Text("Continue"),
+      onPressed: () async {
+        Navigator.of(context).pop();
+        await Auth().deleteUser();
+      },
+    ); // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("AlertDialog"),
+      content: const Text(
+          "This will delete your account permenantly. Do you wish to continue?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    ); // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
-      MainPedometer(), //Page 0
+      const MainPedometer(), //Page 0
       Container(
         // Page 1
         height: double.infinity,
@@ -53,6 +94,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             _userUid(),
             _signOutButton(),
+            _deleteUserButton(),
           ],
         ),
       ),
@@ -73,7 +115,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: "Home",
@@ -84,7 +126,9 @@ class _HomePageState extends State<HomePage> {
           )
         ],
         onTap: (index) {
-          controller.jumpToPage(index);    /// Switching the PageView tabs
+          controller.jumpToPage(index);
+
+          /// Switching the PageView tabs
           setState(() {
             _selectedIndex = index;
           });

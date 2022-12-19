@@ -20,10 +20,19 @@ class Auth {
     required String email,
     required String password,
   }) async {
-    UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    User? user = result.user;
-    postUser(email, user?.uid);
+    try {
+      UserCredential result = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      User? user = result.user;
+      postUser(email, user?.uid);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future deleteUser() async {
+    await deleteUserDB(currentUser?.uid);
+    await currentUser?.delete();
   }
 
   Future<void> signOut() async {
