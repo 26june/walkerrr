@@ -38,6 +38,7 @@ dependencies:
   firebase_auth: ^4.2.1
   firebase_core: ^2.4.0
   http: ^0.13.5
+  pedometer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
