@@ -23,7 +23,6 @@ class _SingleQuestState extends State<SingleQuest> {
   String buttonText = "Start Quest?";
   @override
   Widget build(BuildContext context) {
-    print(((widget.questCurrent - widget.questOffset) / widget.questGoal));
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Center(
