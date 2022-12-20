@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
+import 'package:walkerrr/pages/login_register_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
-  
 }
 
 class _HomePageState extends State<HomePage> {
@@ -26,7 +26,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _title() {
-    return const Text("Firebase Auth");
+    if (_selectedIndex == 0) {
+      return const Text('Steps');
+    } else if (_selectedIndex == 1) {
+      return const Text('Quests');
+    } else {
+      return const Text('Login');
+    }
+  }
+
+  Widget _userDisplayName() {
+    return Text("User Display Name");
   }
 
   Widget _userUid() {
@@ -36,12 +46,16 @@ class _HomePageState extends State<HomePage> {
   Widget _signOutButton() {
     return ElevatedButton(
       onPressed: signOut,
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green, foregroundColor: Colors.white),
       child: const Text("Sign Out"),
     );
   }
 
   Widget _deleteUserButton() {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.pink, foregroundColor: Colors.white),
       onPressed: deleteUser,
       child: const Text("Delete Account"),
     );
@@ -67,7 +81,7 @@ class _HomePageState extends State<HomePage> {
     AlertDialog alert = AlertDialog(
       title: const Text("AlertDialog"),
       content: const Text(
-          "This will delete your account permenantly. Do you wish to continue?"),
+          "This will delete your account permenantly. \n Do you wish to continue?"),
       actions: [
         cancelButton,
         continueButton,
@@ -85,7 +99,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       const MainPedometer(), //Page 0
-            QuestList(),
+      QuestList(),
       Container(
         // Page 2
         height: double.infinity,
@@ -95,6 +109,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            _userDisplayName(),
             _userUid(),
             _signOutButton(),
             _deleteUserButton(),
@@ -120,16 +135,16 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: "Home",
+            icon: Icon(Icons.directions_walk_outlined),
+            label: "Steps",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: "Quest",
+            icon: Icon(Icons.task_alt_outlined),
+            label: "Quests",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            label: "Setting",
+            icon: Icon(Icons.person_outline_outlined),
+            label: "Login",
           )
         ],
         onTap: (index) {
