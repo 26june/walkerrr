@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
+import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,6 +9,7 @@ class HomePage extends StatefulWidget {
 
   @override
   State<HomePage> createState() => _HomePageState();
+  
 }
 
 class _HomePageState extends State<HomePage> {
@@ -83,8 +85,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       const MainPedometer(), //Page 0
+            QuestList(),
       Container(
-        // Page 1
+        // Page 2
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(20),
@@ -119,6 +122,10 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: "Quest",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),

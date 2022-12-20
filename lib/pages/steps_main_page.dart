@@ -3,22 +3,26 @@ import 'dart:async';
 
 import 'package:pedometer/pedometer.dart';
 
+
+
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
 }
 
 class MainPedometer extends StatefulWidget {
+
+
   const MainPedometer({super.key});
 
   @override
-  State<MainPedometer> createState() => _MainPedometerState();
+  State<MainPedometer> createState() => MainPedometerState();
 }
 
-class _MainPedometerState extends State<MainPedometer>
+class MainPedometerState extends State<MainPedometer>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
-  String _status = '?', _steps = '?';
+  String status = '?', steps = '?';
 
   @override
   void initState() {
@@ -29,29 +33,29 @@ class _MainPedometerState extends State<MainPedometer>
   void onStepCount(StepCount event) {
     print(event);
     setState(() {
-      _steps = event.steps.toString();
+      steps = event.steps.toString();
     });
   }
 
   void onPedestrianStatusChanged(PedestrianStatus event) {
     print(event);
     setState(() {
-      _status = event.status;
+      status = event.status;
     });
   }
 
   void onPedestrianStatusError(error) {
     print('onPedestrianStatusError: $error');
     setState(() {
-      _status = 'Pedestrian Status not available';
+      status = 'Pedestrian Status not available';
     });
-    print(_status);
+    print(status);
   }
 
   void onStepCountError(error) {
     print('onStepCountError: $error');
     setState(() {
-      _steps = 'Step Count not available';
+      steps = 'Step Count not available';
     });
   }
 
@@ -81,7 +85,7 @@ class _MainPedometerState extends State<MainPedometer>
                 style: TextStyle(fontSize: 30),
               ),
               Text(
-                _steps,
+                steps,
                 style: TextStyle(fontSize: 60),
               ),
               Divider(
@@ -94,17 +98,17 @@ class _MainPedometerState extends State<MainPedometer>
                 style: TextStyle(fontSize: 30),
               ),
               Icon(
-                _status == 'walking'
+                status == 'walking'
                     ? Icons.directions_walk
-                    : _status == 'stopped'
+                    : status == 'stopped'
                         ? Icons.accessibility_new
                         : Icons.error,
                 size: 100,
               ),
               Center(
                 child: Text(
-                  _status,
-                  style: _status == 'walking' || _status == 'stopped'
+                  status,
+                  style: status == 'walking' || status == 'stopped'
                       ? TextStyle(fontSize: 30)
                       : TextStyle(fontSize: 20, color: Colors.red),
                 ),
@@ -115,6 +119,7 @@ class _MainPedometerState extends State<MainPedometer>
       ),
     );
   }
+
   @override
   bool get wantKeepAlive => true;
 }
