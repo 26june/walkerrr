@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:walkerrr/common/single_quest.dart';
 
 class QuestList extends StatefulWidget {
   const QuestList({super.key});
@@ -9,7 +10,6 @@ class QuestList extends StatefulWidget {
 }
 
 class _QuestListState extends State<QuestList> {
-  int _progress = 0, _questSteps = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +17,8 @@ class _QuestListState extends State<QuestList> {
       body: Center(
         child: Column(
           children: [
-            CircularPercentIndicator(
-              radius: 60.0,
-              lineWidth: 5.0,
-              percent: _progress.toDouble(),
-              center: Text("Quest 1"),
-              progressColor: Colors.green,
-            ),
-            Text("Current Steps: $_questSteps"),
-            Text("Current Percentage: $_progress"),
-            ElevatedButton(onPressed: () {}, child: Text("Start Quest"))
+            SingleQuest(questTitle: "Walk 500 Steps Today", questGoal: 500, questCurrent: 300,questOffset: 100,),
+            SingleQuest(questTitle: "Walk 1000 Steps in Total", questGoal: 1000, questOffset: 100, questCurrent: 300),
           ],
         ),
       ),
