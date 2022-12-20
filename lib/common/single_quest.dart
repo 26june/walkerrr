@@ -23,18 +23,24 @@ class _SingleQuestState extends State<SingleQuest> {
   String buttonText = "Start Quest?";
   @override
   Widget build(BuildContext context) {
+    print(((widget.questCurrent - widget.questOffset) / widget.questGoal));
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Center(
         child: Column(
           children: [
             Text(widget.questTitle),
-            Text("Progress: ${widget.questCurrent} / ${widget.questGoal}"),
+            Text(
+                "Progress: ${widget.questCurrent - widget.questOffset} / ${widget.questGoal}"),
             LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 20,
               lineHeight: 8.0,
-              percent:
-                  (widget.questCurrent - widget.questOffset) / widget.questGoal,
+              percent: ((widget.questCurrent - widget.questOffset) /
+                          widget.questGoal) >
+                      1.0
+                  ? 1.0
+                  : ((widget.questCurrent - widget.questOffset) /
+                      widget.questGoal),
               progressColor: Colors.blue,
             ),
             ElevatedButton(

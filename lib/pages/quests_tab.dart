@@ -17,8 +17,8 @@ class _QuestListState extends State<QuestList> {
       body: Center(
         child: Column(
           children: [
-            SingleQuest(questTitle: "Walk 500 Steps Today", questGoal: 500, questCurrent: 300,questOffset: 100,),
-            SingleQuest(questTitle: "Walk 1000 Steps in Total", questGoal: 1000, questOffset: 100, questCurrent: 300),
+            SingleQuest(questTitle: "Walk 500 Steps Today", questGoal: 500, questOffset: 100, questCurrent: 700),
+            SingleQuest(questTitle: "Walk 1000 Steps in Total", questGoal: 1000, questOffset: 100, questCurrent: 350),
           ],
         ),
       ),
