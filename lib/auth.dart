@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:walkerrr/services/apiConnection.dart';
+import 'package:walkerrr/services/api_connection.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -12,8 +12,10 @@ class Auth {
     required String email,
     required String password,
   }) async {
-    await _firebaseAuth.signInWithEmailAndPassword(
+    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
+    String? uid = result.user?.uid;
+    final userFromDB = await getUserFromDB(uid);
   }
 
   Future<void> createUserWithEmailAndPassword({
