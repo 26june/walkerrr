@@ -14,8 +14,12 @@ class _LoginPageState extends State<LoginPage> {
   bool isLogin = true;
   bool _isVisible = true;
 
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _controllerDisplayName =
+      TextEditingController(text: "");
+  final TextEditingController _controllerEmail =
+      TextEditingController(text: "");
+  final TextEditingController _controllerPassword =
+      TextEditingController(text: "");
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -40,32 +44,46 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _title() {
-    return const Text("Firebase Auth");
+    return const Text("Login");
   }
 
-  Widget _entryField(
-    String title,
-    TextEditingController controller,
+  Widget _entryFieldDisplayName(
+    String displayname,
+    TextEditingController _controllerDisplayName,
   ) {
     return TextField(
-      controller: controller,
+      enableSuggestions: true,
+      controller: _controllerDisplayName,
       decoration: InputDecoration(
-        labelText: title,
+        labelText: displayname,
+      ),
+    );
+  }
+
+  Widget _entryFieldEmail(
+    String email,
+    TextEditingController _controllerEmail,
+  ) {
+    return TextField(
+      enableSuggestions: true,
+      controller: _controllerEmail,
+      decoration: InputDecoration(
+        labelText: email,
       ),
     );
   }
 
   Widget _entryFieldPassword(
-    String title,
-    TextEditingController controller,
+    String password,
+    TextEditingController _controllerPassword,
   ) {
     return TextField(
       obscureText: _isVisible,
       enableSuggestions: false,
       autocorrect: false,
-      controller: controller,
+      controller: _controllerPassword,
       decoration: InputDecoration(
-        labelText: title,
+        labelText: password,
         suffixIcon: IconButton(
           icon: Icon(
             _isVisible ? Icons.visibility : Icons.visibility_off,
@@ -86,6 +104,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _submitButton() {
     return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green, foregroundColor: Colors.white),
         onPressed: isLogin
             ? signInWithEmailAndPassword
             : createUserWithEmailAndPassword,
@@ -95,10 +115,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget _clearForm() {
     return TextButton(
         onPressed: () {
+          _controllerDisplayName.clear();
           _controllerEmail.clear();
           _controllerPassword.clear();
         },
-        child: Text("Clear form"));
+        child: const Text("Clear form"));
   }
 
   Widget _loginOrRegisterButton() {
@@ -125,7 +146,8 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _entryField("email", _controllerEmail),
+            _entryFieldDisplayName("display_name", _controllerDisplayName),
+            _entryFieldEmail("email", _controllerEmail),
             _entryFieldPassword("password", _controllerPassword),
             _errorMessage(),
             _submitButton(),
