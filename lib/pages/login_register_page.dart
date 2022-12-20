@@ -35,7 +35,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> createUserWithEmailAndPassword() async {
     try {
       await Auth().createUserWithEmailAndPassword(
-          email: _controllerEmail.text, password: _controllerPassword.text);
+          email: _controllerEmail.text,
+          password: _controllerPassword.text,
+          displayname: _controllerDisplayName.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
