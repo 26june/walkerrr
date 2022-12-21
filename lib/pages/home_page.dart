@@ -4,6 +4,7 @@ import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
 import 'package:walkerrr/pages/login_register_page.dart';
+import 'package:walkerrr/providers/user_provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
