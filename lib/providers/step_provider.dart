@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-class StepsData with ChangeNotifier {
-  String _steps = "0";
+int globalSteps = 0;
 
-  String get steps => _steps;
-
-  void setSteps(steps) {
-    _steps = steps;
+class StepsContext {
+  updateGlobalSteps(newGlobalSteps) {
+    globalSteps = newGlobalSteps;
   }
 }
