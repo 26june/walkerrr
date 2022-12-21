@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
+import 'package:walkerrr/services/user_data_storage.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -18,6 +19,7 @@ class Auth {
     String? uid = result.user?.uid;
     final userFromDB = await getUserFromDB(uid);
     UserContext().updateUserObject(userFromDB);
+    SecureStorage().setUserObject(userObject);
   }
 
   Future<void> createUserWithEmailAndPassword({
@@ -32,6 +34,7 @@ class Auth {
       await postUser(email, user?.uid, displayname);
       final userFromDB = await getUserFromDB(user?.uid);
       UserContext().updateUserObject(userFromDB);
+      SecureStorage().setUserObject(userObject);
     } catch (e) {
       print(e.toString());
     }
@@ -39,10 +42,12 @@ class Auth {
 
   Future deleteUser() async {
     await deleteUserDB(currentUser?.uid);
+    await SecureStorage().setUserObject({"null": "null"});
     await currentUser?.delete();
   }
 
   Future<void> signOut() async {
+    await SecureStorage().setUserObject({"null": "null"});
     await _firebaseAuth.signOut();
   }
 }

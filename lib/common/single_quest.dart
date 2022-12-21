@@ -4,21 +4,33 @@ import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 import "package:walkerrr/providers/step_provider.dart" as globalSteps;
 
+void checkCompletion(progessCalc, currentQuest) {
+  if (progessCalc >= 1.0) {
+    patchComplete(userObject['uid'], currentQuest);
+  }
+}
 
 class SingleQuest extends StatefulWidget {
-  const SingleQuest(
-      {super.key,
-      required this.questTitle,
-      required this.questGoal,
-      required this.questCurrent});
+  const SingleQuest({
+    super.key,
+    required this.questTitle,
+    required this.questGoal,
+    required this.questCurrent,
+    required this.reward,
+    required this.completed,
+  });
 
   final String questTitle;
   final int questGoal;
   final int questCurrent;
+  final int reward;
+  final bool completed;
 
   @override
   State<SingleQuest> createState() => _SingleQuestState();
 }
+
+final currentQuests = userObject["quests"];
 
 class _SingleQuestState extends State<SingleQuest> {
   int questOffset = 0;
@@ -26,14 +38,22 @@ class _SingleQuestState extends State<SingleQuest> {
   String buttonText = "Start Quest?";
   @override
   Widget build(BuildContext context) {
+    currentQuests.forEach((quest) => {
+          quest["questTitle"] == widget.questTitle
+              ? isButtonActive = false
+              : null
+        });
+    final progessCalc = isButtonActive
+        ? 0
+        : (widget.questCurrent - questOffset) / widget.questGoal;
+    checkCompletion(progessCalc, widget.questTitle);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Center(
         child: Column(
           children: [
             Text(widget.questTitle),
-            Text(
-                "Progress: ${isButtonActive ? 0 : (widget.questCurrent - questOffset)}/ ${widget.questGoal}"),
+            Text("Progress: $progessCalc"),
             LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 20,
               lineHeight: 8.0,
@@ -47,12 +67,17 @@ class _SingleQuestState extends State<SingleQuest> {
                     ? () {
                         setState(() {
                           questOffset = globalSteps.globalSteps;
-                          patchQuestsFromDB(userObject['uid'], {
+                          final newQuest = {
                             "questTitle": widget.questTitle,
                             "questGoal": widget.questGoal,
                             "questOffset": globalSteps.globalSteps,
-                            "questCurrent": widget.questCurrent
-                          });
+                            "questCurrent": widget.questCurrent,
+                            "questReward": widget.reward,
+                            "questCompleted": widget.completed
+                          };
+                          patchQuestsToDB(userObject['uid'], newQuest);
+                          final currentQuests = userObject["quests"];
+                          userObject["quests"] = [...currentQuests, newQuest];
                           isButtonActive = false;
                           buttonText = "Quest Started";
                         });
