@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:walkerrr/providers/user_provider.dart';
 
 class SecureStorage {
   // Create _secureStorage
@@ -30,6 +33,15 @@ class SecureStorage {
 
   Future<String?> getPassWord() async {
     return await _secureStorage.read(key: _keyPassWord);
+  }
+
+  Future<void> setUserObject(userObj) async {
+    final user = jsonEncode(userObj);
+    await _secureStorage.write(key: "localUserObject", value: user);
+  }
+
+  Future getUserObject() async {
+    return await _secureStorage.read(key: "localUserObject");
   }
 
   // delete data from _secureStorage
