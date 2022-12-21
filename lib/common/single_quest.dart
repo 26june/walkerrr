@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:walkerrr/providers/user_provider.dart';
+import 'package:walkerrr/services/api_connection.dart';
 
 class SingleQuest extends StatefulWidget {
   const SingleQuest(
@@ -46,6 +48,7 @@ class _SingleQuestState extends State<SingleQuest> {
                 onPressed: isButtonActive
                     ? () {
                         setState(() {
+                          patchUserFromDB(userObject['uid']);
                           isButtonActive = false;
                           buttonText = "Quest Started";
                         });
