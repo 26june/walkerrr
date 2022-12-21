@@ -48,7 +48,12 @@ class _SingleQuestState extends State<SingleQuest> {
                 onPressed: isButtonActive
                     ? () {
                         setState(() {
-                          patchUserFromDB(userObject['uid']);
+                          patchQuestsFromDB(userObject['uid'], {
+                            "questTitle": widget.questTitle,
+                            "questGoal": widget.questGoal,
+                            "questOffset": widget.questOffset,
+                            "questCurrent": widget.questCurrent
+                          });
                           isButtonActive = false;
                           buttonText = "Quest Started";
                         });

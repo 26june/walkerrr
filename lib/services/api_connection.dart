@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:walkerrr/providers/user_provider.dart';
 
-const baseAPI = 'https://walking.cyclic.app';
+const baseAPI = 'https://walking-backend.onrender.com';
 
 Future<void> postUser(postedEmail, uid, displayname) async {
   final url = Uri.http(baseAPI, '/api/users');
@@ -35,17 +35,15 @@ Future getUserFromDB(uid) async {
   return parsedUser;
 }
 
-Future patchUserFromDB(uid) async {
+Future patchQuestsFromDB(uid, newQuest) async {
   final url = Uri.http(baseAPI, '/api/users/$uid');
-  final user = await http.patch(url,
+  final currentQuests = userObject["quests"];
+  await http.patch(url,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       body: jsonEncode({
-        'quests': [
-          ...userObject['quests'],
-          {'newQuest': 'questyquest'}
-        ]
+        'quests': [...currentQuests, newQuest]
       }));
 }
