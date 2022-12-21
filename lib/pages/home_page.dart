@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
+import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,11 +28,29 @@ class _HomePageState extends State<HomePage> {
 
   Widget _title() {
     if (_selectedIndex == 0) {
-      return const Text('Steps');
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Steps'),
+          Text('Coins: ${userObject["coins"]}'),
+        ],
+      );
     } else if (_selectedIndex == 1) {
-      return const Text('Quests');
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Quests'),
+          Text('Coins: ${userObject["coins"]}'),
+        ],
+      );
     } else {
-      return const Text('Settings');
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Settings'),
+          Text('Coins: ${userObject["coins"]}'),
+        ],
+      );
     }
   }
 
