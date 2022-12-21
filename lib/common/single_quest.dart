@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:walkerrr/providers/user_provider.dart';
+import 'package:walkerrr/services/api_connection.dart';
 import "package:walkerrr/providers/step_provider.dart" as globalSteps;
+
 
 class SingleQuest extends StatefulWidget {
   const SingleQuest(
@@ -44,6 +47,12 @@ class _SingleQuestState extends State<SingleQuest> {
                     ? () {
                         setState(() {
                           questOffset = globalSteps.globalSteps;
+                          patchQuestsFromDB(userObject['uid'], {
+                            "questTitle": widget.questTitle,
+                            "questGoal": widget.questGoal,
+                            "questOffset": globalSteps.globalSteps,
+                            "questCurrent": widget.questCurrent
+                          });
                           isButtonActive = false;
                           buttonText = "Quest Started";
                         });
