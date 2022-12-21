@@ -6,6 +6,8 @@ import 'package:walkerrr/pages/steps_main_page.dart';
 import 'package:walkerrr/pages/login_register_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
+import 'package:walkerrr/providers/user_provider.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
