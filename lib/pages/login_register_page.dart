@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:walkerrr/services/user_data_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,17 +13,35 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = "";
-  bool isLogin = true;
+  bool _isLogin = true;
   bool _isVisible = true;
+  bool _dontStore = false;
+  bool _clearInput = false;
 
-  final TextEditingController _controllerDisplayName =
-      TextEditingController(text: "");
-  final TextEditingController _controllerEmail =
-      TextEditingController(text: "");
-  final TextEditingController _controllerPassword =
-      TextEditingController(text: "");
+  final TextEditingController _controllerDisplayName = TextEditingController();
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+
+  final SecureStorage _secureStorage = SecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSecureStorageData();
+  }
+
+  Future<void> fetchSecureStorageData() async {
+    _controllerDisplayName.text = await _secureStorage.getDisplayName() ?? '';
+    _controllerEmail.text = await _secureStorage.getEmail() ?? '';
+    _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
+  }
 
   Future<void> signInWithEmailAndPassword() async {
+    if (!_dontStore) {
+      await _secureStorage.setDisplayName(_controllerDisplayName.text);
+      await _secureStorage.setEmail(_controllerEmail.text);
+      await _secureStorage.setPassWord(_controllerPassword.text);
+    }
     try {
       await Auth().signInWithEmailAndPassword(
           email: _controllerEmail.text, password: _controllerPassword.text);
@@ -33,6 +53,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> createUserWithEmailAndPassword() async {
+    if (!_dontStore) {
+      await _secureStorage.setDisplayName(_controllerDisplayName.text);
+      await _secureStorage.setEmail(_controllerEmail.text);
+      await _secureStorage.setPassWord(_controllerPassword.text);
+    }
     try {
       await Auth().createUserWithEmailAndPassword(
           email: _controllerEmail.text,
@@ -46,18 +71,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _title() {
-    return const Text("Login");
+    return (_isLogin) ? const Text("Login") : const Text("Register");
   }
 
   Widget _entryFieldDisplayName(
-    String displayname,
+    String displayName,
     TextEditingController _controllerDisplayName,
   ) {
     return TextField(
       enableSuggestions: true,
       controller: _controllerDisplayName,
       decoration: InputDecoration(
-        labelText: displayname,
+        prefixIcon: const Icon(Icons.person_outline_outlined),
+        labelText: displayName,
       ),
     );
   }
@@ -70,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
       enableSuggestions: true,
       controller: _controllerEmail,
       decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.alternate_email_outlined),
         labelText: email,
       ),
     );
@@ -86,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _controllerPassword,
       decoration: InputDecoration(
         labelText: password,
+        prefixIcon: const Icon(Icons.password_outlined),
         suffixIcon: IconButton(
           icon: Icon(
             _isVisible ? Icons.visibility : Icons.visibility_off,
@@ -108,56 +136,79 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green, foregroundColor: Colors.white),
-        onPressed: isLogin
+        onPressed: _isLogin
             ? signInWithEmailAndPassword
             : createUserWithEmailAndPassword,
-        child: Text(isLogin ? "Login" : "Register"));
-  }
-
-  Widget _clearForm() {
-    return TextButton(
-        onPressed: () {
-          _controllerDisplayName.clear();
-          _controllerEmail.clear();
-          _controllerPassword.clear();
-        },
-        child: const Text("Clear form"));
+        child: Text(_isLogin ? "Login" : "Register"));
   }
 
   Widget _loginOrRegisterButton() {
     return TextButton(
         onPressed: () {
           setState(() {
-            isLogin = !isLogin;
+            _isLogin = !_isLogin;
           });
         },
-        child: Text(isLogin ? "Register Instead" : "Login Instead"));
+        child: Text(_isLogin ? "Register Instead" : "Login Instead"));
+  }
+
+  Widget _dontStoreMyData() {
+    return CheckboxListTile(
+      title: const Text("Don't Store My Data", style: TextStyle(fontSize: 12)),
+      value: _dontStore,
+      onChanged: (bool? value) {
+        setState(() {
+          _dontStore = value!;
+        });
+      },
+      // controlAffinity: ListTileControlAffinity.leading,
+    );
+  }
+
+  Widget _clearForm() {
+    return CheckboxListTile(
+      title: const Text("Clear Form", style: TextStyle(fontSize: 12)),
+      value: _clearInput,
+      onChanged: (bool? value) {
+        _controllerDisplayName.clear();
+        _controllerEmail.clear();
+        _controllerPassword.clear();
+        setState(() {
+          errorMessage = '';
+          _clearInput = value!;
+        });
+      },
+      // controlAffinity: ListTileControlAffinity.leading,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _title(),
-      ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _entryFieldDisplayName("display_name", _controllerDisplayName),
-            _entryFieldEmail("email", _controllerEmail),
-            _entryFieldPassword("password", _controllerPassword),
-            _errorMessage(),
-            _submitButton(),
-            _loginOrRegisterButton(),
-            _clearForm(),
-          ],
+        appBar: AppBar(
+          title: _title(),
         ),
-      ),
-    );
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  (!_isLogin)
+                      ? _entryFieldDisplayName("name", _controllerDisplayName)
+                      : const SizedBox(width: double.infinity, height: 60.0),
+                  _entryFieldEmail("email", _controllerEmail),
+                  _entryFieldPassword("password", _controllerPassword),
+                  _errorMessage(),
+                  _submitButton(),
+                  _loginOrRegisterButton(),
+                  _dontStoreMyData(),
+                  _clearForm(),
+                ]),
+          ),
+        ));
   }
 }

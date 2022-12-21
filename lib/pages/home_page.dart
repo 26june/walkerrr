@@ -4,7 +4,10 @@ import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
 import 'package:walkerrr/pages/login_register_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:walkerrr/services/user_data_storage.dart';
 import 'package:walkerrr/providers/user_provider.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -32,13 +35,29 @@ class _HomePageState extends State<HomePage> {
     } else if (_selectedIndex == 1) {
       return const Text('Quests');
     } else {
-      return const Text('Login');
+      return const Text('Settings');
     }
   }
 
-  Widget _userDisplayName() {
-    return Text("User Display Name");
+  final SecureStorage _secureStorage = SecureStorage();
+  @override
+  void initState() {
+    super.initState();
+    fetchSecureStorageData();
   }
+
+  Future<void> fetchSecureStorageData() async {
+    final displayName = await _secureStorage.getDisplayName() ?? '';
+    final email = await _secureStorage.getEmail() ?? '';
+    final password = await _secureStorage.getPassWord() ?? '';
+  }
+
+  // ! Widget _welcomeMessage() {
+  //   if (displayName != null)
+  //     return Text('Hi, $displayName', style: TextStyle(fontSize: 20));
+  //   else
+  //     return Text('Welcome to Walkerrr', style: TextStyle(fontSize: 20));
+  // }
 
   Widget _userUid() {
     return Text(user?.email ?? "User Email");
@@ -110,7 +129,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _userDisplayName(),
+            //! _welcomeMessage(),
             _userUid(),
             _signOutButton(),
             _deleteUserButton(),
@@ -145,7 +164,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline_outlined),
-            label: "Login",
+            label: "Settings",
           )
         ],
         onTap: (index) {
