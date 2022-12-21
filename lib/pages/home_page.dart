@@ -180,9 +180,6 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     height: 40,
                     color: Colors.grey,
-                    child:
-
-                    
                   ),
                   Container(
                     height: 50,
