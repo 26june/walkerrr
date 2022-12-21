@@ -35,7 +35,7 @@ Future getUserFromDB(uid) async {
   return parsedUser;
 }
 
-Future patchQuestsToDB(uid, newQuest) async {
+Future<void> patchQuestsToDB(uid, newQuest) async {
   final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
   final currentQuests = userObject["quests"];
   await http.patch(url,
@@ -48,7 +48,7 @@ Future patchQuestsToDB(uid, newQuest) async {
       }));
 }
 
-Future patchCoins(uid, increment) async {
+Future<void> patchCoins(uid, increment) async {
   final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
   final currentCoins = userObject["coins"];
   await http.patch(url,
@@ -57,6 +57,25 @@ Future patchCoins(uid, increment) async {
         'Accept': 'application/json'
       },
       body: jsonEncode({'coins': currentCoins + increment}));
+}
+
+Future<void> patchComplete(uid, currentQuest) async {
+  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final currentQuests = userObject["quests"];
+  final removeable = [];
+  currentQuests.asMap().forEach((index, quest) => {
+        if (quest["questTitle"] == currentQuest)
+          {quest["questCompleted"] = true, removeable.add(quest)},
+      });
+  for (var quest in removeable) {
+    currentQuests.remove(quest);
+  }
+  await http.patch(url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: jsonEncode({'quests': currentQuests}));
 }
 
 Future<void> patchTrophiesToDB(uid, newTrophy) async {
