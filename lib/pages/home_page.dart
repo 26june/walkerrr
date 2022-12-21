@@ -37,7 +37,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+// ==================== User settings page ====================
+
+// --------- Secure storage fetch (does not work) ---------
+
   final SecureStorage _secureStorage = SecureStorage();
+
   @override
   void initState() {
     super.initState();
@@ -48,18 +53,18 @@ class _HomePageState extends State<HomePage> {
     final displayName = await _secureStorage.getDisplayName() ?? '';
     final email = await _secureStorage.getEmail() ?? '';
     final password = await _secureStorage.getPassWord() ?? '';
+    print('=================== $displayName ================');
+    print('=================== $email ================');
+    print('=================== $password ================');
   }
 
-  // ! Widget _welcomeMessage() {
-  //   if (displayName != null)
-  //     return Text('Hi, $displayName', style: TextStyle(fontSize: 20));
-  //   else
-  //     return Text('Welcome to Walkerrr', style: TextStyle(fontSize: 20));
-  // }
+// --------- User data edit ---------
 
   Widget _userUid() {
     return Text(user?.email ?? "User Email");
   }
+
+// --------- Buttons ---------
 
   Widget _signOutButton() {
     return ElevatedButton(
@@ -97,7 +102,7 @@ class _HomePageState extends State<HomePage> {
       },
     ); // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: const Text("AlertDialog"),
+      title: const Text("Delete Account Permanently"),
       content: const Text(
           "This will delete your account permenantly. \n Do you wish to continue?"),
       actions: [
@@ -117,20 +122,58 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       const MainPedometer(), //Page 0
-      QuestList(),
+      const QuestList(),
       Container(
         // Page 2
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            //! _welcomeMessage(),
-            _userUid(),
-            _signOutButton(),
-            _deleteUserButton(),
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: const Text('Welcome to Walkerrr',
+                  style: TextStyle(fontSize: 30)),
+            ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: _userUid(),
+            ),
+            Container(
+              height: 200,
+              width: double.infinity,
+              color: Colors.grey,
+              child: _userUid(),
+            ),
+            Container(
+              height: 40,
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 50,
+                    child: _signOutButton(),
+                  ),
+                  Container(
+                    height: 40,
+                    color: Colors.grey,
+                    child:
+
+                    
+                  ),
+                  Container(
+                    height: 50,
+                    child: _deleteUserButton(),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

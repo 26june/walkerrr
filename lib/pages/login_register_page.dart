@@ -13,10 +13,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = "";
-  bool _isLogin = true;
+  bool _isLogin = false;
   bool _isVisible = true;
   bool _dontStore = false;
-  bool _clearInput = false;
 
   final TextEditingController _controllerDisplayName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
@@ -76,9 +75,15 @@ class _LoginPageState extends State<LoginPage> {
     String displayName,
     TextEditingController _controllerDisplayName,
   ) {
-    return TextField(
+    return TextFormField(
       enableSuggestions: true,
       controller: _controllerDisplayName,
+      validator: (value) {
+        if (value == '') {
+          return 'Enter your name!';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.person_outline_outlined),
         labelText: displayName,
@@ -90,9 +95,15 @@ class _LoginPageState extends State<LoginPage> {
     String email,
     TextEditingController _controllerEmail,
   ) {
-    return TextField(
+    return TextFormField(
       enableSuggestions: true,
       controller: _controllerEmail,
+      validator: (value) {
+        if (value == '') {
+          return 'Enter a valid email!';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.alternate_email_outlined),
         labelText: email,
@@ -104,11 +115,17 @@ class _LoginPageState extends State<LoginPage> {
     String password,
     TextEditingController _controllerPassword,
   ) {
-    return TextField(
+    return TextFormField(
       obscureText: _isVisible,
       enableSuggestions: false,
       autocorrect: false,
       controller: _controllerPassword,
+      validator: (value) {
+        if (value == '') {
+          return 'Enter a valid password!';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         labelText: password,
         prefixIcon: const Icon(Icons.password_outlined),
@@ -152,32 +169,28 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _dontStoreMyData() {
     return CheckboxListTile(
-      title: const Text("Don't Store My Data", style: TextStyle(fontSize: 12)),
+      title: const Text("Don't Save Data", style: TextStyle(fontSize: 12)),
       value: _dontStore,
       onChanged: (bool? value) {
         setState(() {
           _dontStore = value!;
         });
       },
-      // controlAffinity: ListTileControlAffinity.leading,
+      controlAffinity: ListTileControlAffinity.leading,
     );
   }
 
-  Widget _clearForm() {
-    return CheckboxListTile(
-      title: const Text("Clear Form", style: TextStyle(fontSize: 12)),
-      value: _clearInput,
-      onChanged: (bool? value) {
-        _controllerDisplayName.clear();
-        _controllerEmail.clear();
-        _controllerPassword.clear();
-        setState(() {
-          errorMessage = '';
-          _clearInput = value!;
-        });
-      },
-      // controlAffinity: ListTileControlAffinity.leading,
-    );
+  Widget _clearMyData() {
+    return TextButton(
+        onPressed: () {
+          _controllerDisplayName.clear();
+          _controllerEmail.clear();
+          _controllerPassword.clear();
+          setState(() {
+            errorMessage = '';
+          });
+        },
+        child: const Text("Clear Form", style: TextStyle(fontSize: 12)));
   }
 
   @override
@@ -195,16 +208,70 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  (!_isLogin)
-                      ? _entryFieldDisplayName("name", _controllerDisplayName)
-                      : const SizedBox(width: double.infinity, height: 60.0),
-                  _entryFieldEmail("email", _controllerEmail),
-                  _entryFieldPassword("password", _controllerPassword),
-                  _errorMessage(),
-                  _submitButton(),
-                  _loginOrRegisterButton(),
-                  _dontStoreMyData(),
-                  _clearForm(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: double.infinity,
+                        child: Center(
+                          child: (!_isLogin)
+                              ? _entryFieldDisplayName(
+                                  "name", _controllerDisplayName)
+                              : const SizedBox(
+                                  width: double.infinity,
+                                ),
+                        ),
+                      ),
+                      Container(
+                        height: 60,
+                        width: double.infinity,
+                        child: _entryFieldEmail("email", _controllerEmail),
+                      ),
+                      Container(
+                        height: 60,
+                        width: double.infinity,
+                        child: _entryFieldPassword(
+                            "password", _controllerPassword),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 50,
+                        width: double.infinity,
+                        child: Center(
+                          child: _errorMessage(),
+                        ),
+                      ),
+                      Container(
+                        height: 40,
+                        width: double.infinity,
+                        child: _submitButton(),
+                      ),
+                      Container(
+                        height: 40,
+                        width: double.infinity,
+                        child: _loginOrRegisterButton(),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: _dontStoreMyData(),
+                      ),
+                      Expanded(
+                        child: _clearMyData(),
+                      ),
+                    ],
+                  )
                 ]),
           ),
         ));
