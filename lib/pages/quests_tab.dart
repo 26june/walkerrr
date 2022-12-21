@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:walkerrr/common/single_quest.dart';
 import 'package:walkerrr/providers/step_provider.dart' as globalSteps;
 
@@ -11,14 +10,28 @@ class QuestList extends StatefulWidget {
 }
 
 class _QuestListState extends State<QuestList> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
           children: [
-            SingleQuest(questTitle: "Walk 500 Steps", questGoal: 500, questCurrent: globalSteps.globalSteps)
+            SingleQuest(
+              questTitle: "Walk 500 Steps",
+              questGoal: 500,
+              questCurrent: globalSteps.globalSteps,
+              reward: 50,
+            ),
+            SingleQuest(
+                questTitle: "Walk 5000 Steps",
+                questGoal: 5000,
+                questCurrent: globalSteps.globalSteps,
+                reward: 1000),
+            SingleQuest(
+                questTitle: "Walk 10000 Steps",
+                questGoal: 10000,
+                questCurrent: globalSteps.globalSteps,
+                reward: 2500)
           ],
         ),
       ),

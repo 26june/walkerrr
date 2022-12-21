@@ -4,17 +4,18 @@ import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 import "package:walkerrr/providers/step_provider.dart" as globalSteps;
 
-
 class SingleQuest extends StatefulWidget {
   const SingleQuest(
       {super.key,
       required this.questTitle,
       required this.questGoal,
-      required this.questCurrent});
+      required this.questCurrent,
+      required this.reward});
 
   final String questTitle;
   final int questGoal;
   final int questCurrent;
+  final int reward;
 
   @override
   State<SingleQuest> createState() => _SingleQuestState();
@@ -47,12 +48,15 @@ class _SingleQuestState extends State<SingleQuest> {
                     ? () {
                         setState(() {
                           questOffset = globalSteps.globalSteps;
-                          patchQuestsFromDB(userObject['uid'], {
+                          final newQuest = {
                             "questTitle": widget.questTitle,
                             "questGoal": widget.questGoal,
                             "questOffset": globalSteps.globalSteps,
                             "questCurrent": widget.questCurrent
-                          });
+                          };
+                          patchQuestsToDB(userObject['uid'], newQuest);
+                          final currentQuests = userObject["quests"];
+                          userObject["quests"] = [...currentQuests, newQuest];
                           isButtonActive = false;
                           buttonText = "Quest Started";
                         });
