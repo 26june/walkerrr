@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:pedometer/pedometer.dart';
-
-
+import 'package:walkerrr/providers/step_provider.dart' as global;
 
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
 }
 
 class MainPedometer extends StatefulWidget {
-
-
   const MainPedometer({super.key});
 
   @override
@@ -34,6 +31,7 @@ class MainPedometerState extends State<MainPedometer>
     print(event);
     setState(() {
       steps = event.steps.toString();
+      global.StepsContext().updateGlobalSteps(event.steps);
     });
   }
 
