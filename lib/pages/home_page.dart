@@ -3,14 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
-import 'package:walkerrr/pages/login_register_page.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
-import 'package:walkerrr/providers/user_provider.dart';
-
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -119,7 +115,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       const MainPedometer(), //Page 0
-      QuestList(),
+      const QuestList(),
       Container(
         // Page 2
         height: double.infinity,

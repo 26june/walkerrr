@@ -5,7 +5,7 @@ import 'package:walkerrr/providers/user_provider.dart';
 const baseAPI = 'https://walking-backend.onrender.com';
 
 Future<void> postUser(postedEmail, uid, displayname) async {
-  final url = Uri.http(baseAPI, '/api/users');
+  final url = Uri.http("192.168.0.47:9095", '/api/users');
   await http.post(url,
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ Future<void> postUser(postedEmail, uid, displayname) async {
 }
 
 Future<void> deleteUserDB(uid) async {
-  final url = Uri.http(baseAPI, '/api/users/$uid');
+  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
   await http.delete(url, headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -26,7 +26,7 @@ Future<void> deleteUserDB(uid) async {
 }
 
 Future getUserFromDB(uid) async {
-  final url = Uri.http(baseAPI, '/api/users/$uid');
+  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
   final user = await http.get(url, headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -36,7 +36,7 @@ Future getUserFromDB(uid) async {
 }
 
 Future patchQuestsFromDB(uid, newQuest) async {
-  final url = Uri.http(baseAPI, '/api/users/$uid');
+  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
   final currentQuests = userObject["quests"];
   await http.patch(url,
       headers: {
