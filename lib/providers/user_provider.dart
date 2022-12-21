@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 var userObject = {};
 
 class UserContext {
