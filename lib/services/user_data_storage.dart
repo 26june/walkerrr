@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 
+final String _keyDisplayName = 'displayName';
+final String _keyEmail = 'email';
+final String _keyPassWord = 'password';
+
 class SecureStorage {
   // Create _secureStorage
   final _secureStorage = const FlutterSecureStorage();
-
-  final String _keyDisplayName = 'displayName';
-  final String _keyEmail = 'email';
-  final String _keyPassWord = 'password';
 
   Future setDisplayName(String displayName) async {
     await _secureStorage.write(key: _keyDisplayName, value: displayName);
