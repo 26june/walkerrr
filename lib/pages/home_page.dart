@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
 // --------- Secure storage fetch (does not work) ---------
 
   final SecureStorage _secureStorage = SecureStorage();
+  var userCredentialsState = [];
 
   @override
   void initState() {
@@ -70,9 +71,10 @@ class _HomePageState extends State<HomePage> {
     final displayName = await _secureStorage.getDisplayName() ?? '';
     final email = await _secureStorage.getEmail() ?? '';
     final password = await _secureStorage.getPassWord() ?? '';
-    print('=================== $displayName ================');
-    print('=================== $email ================');
-    print('=================== $password ================');
+    final userCredentials = [displayName, email, password];
+    setState(() {
+      userCredentialsState = userCredentials;
+    });
   }
 
 // --------- User data edit ---------
@@ -152,8 +154,14 @@ class _HomePageState extends State<HomePage> {
             Container(
               height: 50,
               width: double.infinity,
-              child: const Text('Welcome to Walkerrr',
-                  style: TextStyle(fontSize: 30)),
+              child: Row(
+                children: [
+                  Text('Welcome ', style: TextStyle(fontSize: 24)),
+                  Text(userCredentialsState[0].toString(),
+                      style: TextStyle(fontSize: 24)),
+                  Text(' in Walkerrr!', style: TextStyle(fontSize: 24)),
+                ],
+              ),
             ),
             Container(
               height: 50,

@@ -12,13 +12,21 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = "";
-  bool _isLogin = false;
-  bool _isVisible = true;
-  bool _dontStore = false;
+  bool _isLogin = false; // Login/Register button text change
+  bool _isVisible = true; // Show/Hide password
+  bool _dontStore = false; // Secure Storage will not be updated
+
+// Form text boxes controller
 
   final TextEditingController _controllerDisplayName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+
+// ======== Secure Storage =========>
+
+  final String _keyDisplayName = 'displayName';
+  final String _keyEmail = 'email';
+  final String _keyPassWord = 'password';
 
   final SecureStorage _secureStorage = SecureStorage();
 
@@ -26,13 +34,34 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     fetchSecureStorageData();
+    // setSecureStorageData();
+    // deleteSecureStorageData();
   }
 
   Future<void> fetchSecureStorageData() async {
     _controllerDisplayName.text = await _secureStorage.getDisplayName() ?? '';
     _controllerEmail.text = await _secureStorage.getEmail() ?? '';
     _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
+    setState(() {
+      _isLogin = true;
+    });
   }
+
+  // Future<void> setSecureStorageData() async {
+  //   await _secureStorage.write(key: _keyDisplayName);
+  //   await _secureStorage.write(key: _keyEmail);
+  //   await _secureStorage.write(key: _keyPassWord);
+  // }
+
+  // Future<void> deleteSecureStorageData() async {
+  //   await _secureStorage.delete(key: _keyDisplayName);
+  //   await _secureStorage.delete(key: _keyEmail);
+  //   await _secureStorage.delete(key: _keyPassWord);
+  // }
+
+// <========
+
+// ======== Login / Register auth =========>
 
   Future<void> signInWithEmailAndPassword() async {
     if (!_dontStore) {
@@ -67,10 +96,15 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
+// <========
+
+// Page App bar login/register title
 
   Widget _title() {
     return (_isLogin) ? const Text("Login") : const Text("Register");
   }
+
+// ======== Form =========>
 
   Widget _entryFieldDisplayName(
     String displayName,
@@ -194,6 +228,10 @@ class _LoginPageState extends State<LoginPage> {
         child: const Text("Clear Form", style: TextStyle(fontSize: 12)));
   }
 
+// <========
+
+// ======== Login page structure =========>
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -278,3 +316,4 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 }
+// <========
