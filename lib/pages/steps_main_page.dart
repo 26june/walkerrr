@@ -142,14 +142,7 @@ class MainPedometerState extends State<MainPedometer>
                   'Pedestrian status:',
                   style: TextStyle(fontSize: 30),
                 ),
-                Icon(
-                  status == 'walking'
-                      ? Icons.directions_walk
-                      : status == 'stopped'
-                          ? Icons.accessibility_new
-                          : Icons.error,
-                  size: 100,
-                ),
+                Image.asset(status == "walking" ? "assets/images/__Run.gif" : "assets/images/__Idle.gif", scale: 0.5,),
                 Center(
                   child: Text(
                     status,
