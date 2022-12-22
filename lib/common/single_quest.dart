@@ -5,6 +5,7 @@ import 'package:walkerrr/services/api_connection.dart';
 import "package:walkerrr/providers/step_provider.dart" as globalSteps;
 
 void checkCompletion(progessCalc, currentQuest, reward) {
+  print(currentQuest);
   if (progessCalc >= 1.0) {
     patchComplete(userObject['uid'], currentQuest);
     patchCoins(userObject['uid'], reward);
@@ -40,15 +41,19 @@ class _SingleQuestState extends State<SingleQuest> {
   Widget build(BuildContext context) {
     if (currentQuests != null) {
       currentQuests.forEach((quest) => {
-            quest["questTitle"] == widget.questTitle
-                ? isButtonActive = false
-                : null
+            if (quest["questTitle"] == widget.questTitle)
+              {
+                isButtonActive = false,
+                buttonText = "Quest Active",
+              }
+            else
+              {null}
           });
     }
     final progessCalc = isButtonActive
         ? 0
         : (widget.questCurrent - questOffset) / widget.questGoal;
-    checkCompletion(progessCalc, widget.questTitle, widget.reward);
+    progessCalc >= 1.0 ? buttonText = "Claim" : null;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Center(
@@ -81,10 +86,23 @@ class _SingleQuestState extends State<SingleQuest> {
                           final currentQuests = userObject["quests"];
                           userObject["quests"] = [...currentQuests, newQuest];
                           isButtonActive = false;
-                          buttonText = "Quest Started";
                         });
                       }
-                    : null,
+                    : () {
+                        checkCompletion(
+                            progessCalc, widget.questTitle, widget.reward);
+                      }, // add claim button conditional
+                style: isButtonActive
+                    ? ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pink,
+                        foregroundColor: Colors.white)
+                    : progessCalc == 1.0
+                        ? ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white)
+                        : ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white),
                 child: Text(buttonText))
           ],
         ),
