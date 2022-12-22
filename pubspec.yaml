@@ -42,6 +42,7 @@ dependencies:
    provider: ^6.0.5
    percent_indicator: ^4.2.2
    flutter_secure_storage: ^7.0.1
+   form_field_validator: ^1.1.0
 
 dev_dependencies:
    flutter_test:
