@@ -4,9 +4,10 @@ import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 import "package:walkerrr/providers/step_provider.dart" as globalSteps;
 
-void checkCompletion(progessCalc, currentQuest) {
+void checkCompletion(progessCalc, currentQuest, reward) {
   if (progessCalc >= 1.0) {
     patchComplete(userObject['uid'], currentQuest);
+    patchCoins(userObject['uid'], reward);
   }
 }
 
@@ -46,7 +47,7 @@ class _SingleQuestState extends State<SingleQuest> {
     final progessCalc = isButtonActive
         ? 0
         : (widget.questCurrent - questOffset) / widget.questGoal;
-    checkCompletion(progessCalc, widget.questTitle);
+    checkCompletion(progessCalc, widget.questTitle, widget.reward);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Center(
