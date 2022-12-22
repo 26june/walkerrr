@@ -35,6 +35,16 @@ Future getUserFromDB(uid) async {
   return parsedUser;
 }
 
+Future<void> patchUsername(uid, newUsername) async {
+  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  await http.patch(url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: jsonEncode({'displayName': newUsername}));
+}
+
 Future<void> patchQuestsToDB(uid, newQuest) async {
   final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
   final currentQuests = userObject["quests"];
