@@ -314,11 +314,8 @@ class _LoginPageState extends State<LoginPage> {
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green, foregroundColor: Colors.white),
         onPressed: () {
-          // Validate returns true if the form is valid, or false otherwise.
           if (_formKey.currentState!.validate()) {
-            // If the form is valid, display a snackbar. In the real world,
-            // you'd often call a server or save the information in a database.
-            if (_passwordConfirm == _password) {
+            if (_passwordConfirm == _password || _isLogin) {
               _submitValidation();
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
