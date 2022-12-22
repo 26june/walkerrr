@@ -4,6 +4,7 @@ import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
 import 'package:walkerrr/providers/user_provider.dart';
+import 'package:walkerrr/services/api_connection.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,6 +25,12 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> deleteUser() async {
     showAlertDialog(context);
+  }
+
+  Future<void> updateUserName() async {
+    final newUsername = _controllerDisplayName.text;
+    patchUsername(userObject['uid'], newUsername);
+    _controllerDisplayName.text = '';
   }
 
   Widget _title() {
@@ -72,9 +79,9 @@ class _HomePageState extends State<HomePage> {
     final email = await _secureStorage.getEmail() ?? '';
     final password = await _secureStorage.getPassWord() ?? '';
     final userCredentials = [displayName, email, password];
-    setState(() {
-      userCredentialsState = userCredentials;
-    });
+    // setState(() {
+    //   userCredentialsState = userCredentials;
+    // });
   }
 
 // --------- User data edit ---------
@@ -97,9 +104,40 @@ class _HomePageState extends State<HomePage> {
   Widget _deleteUserButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.pink, foregroundColor: Colors.white),
+          backgroundColor: Colors.red[600], foregroundColor: Colors.white),
       onPressed: deleteUser,
       child: const Text("Delete Account"),
+    );
+  }
+
+  Widget _changeUserName() {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue[600], foregroundColor: Colors.white),
+      onPressed: updateUserName,
+      child: const Text("Change Username"),
+    );
+  }
+
+  final TextEditingController _controllerDisplayName = TextEditingController();
+
+  Widget _entryFieldDisplayName(
+    String displayName,
+    TextEditingController _controllerDisplayName,
+  ) {
+    return TextFormField(
+      enableSuggestions: true,
+      controller: _controllerDisplayName,
+      validator: (value) {
+        if (value == '') {
+          return 'Change your display name...';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.person),
+        labelText: displayName,
+      ),
     );
   }
 
@@ -112,6 +150,8 @@ class _HomePageState extends State<HomePage> {
       onPressed: () {
         Navigator.of(context).pop();
       },
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.grey[600])),
     );
     Widget continueButton = ElevatedButton(
       child: const Text("Continue"),
@@ -119,14 +159,24 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).pop();
         await Auth().deleteUser();
       },
-    ); // set up the AlertDialog
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.red[600])),
+    );
+    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: const Text("Delete Account Permanently"),
       content: const Text(
-          "This will delete your account permenantly. \n Do you wish to continue?"),
+          "This will delete your account permenantly. \n\nDo you wish to continue?"),
       actions: [
-        cancelButton,
-        continueButton,
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              cancelButton,
+              continueButton,
+            ],
+          ),
+        )
       ],
     ); // show the dialog
     showDialog(
@@ -169,30 +219,21 @@ class _HomePageState extends State<HomePage> {
               child: _userUid(),
             ),
             Container(
-              height: 200,
+              height: 100,
               width: double.infinity,
-              color: Colors.grey,
-              child: _userUid(),
+              child: _entryFieldDisplayName(
+                  "New Display name", _controllerDisplayName),
             ),
             Container(
-              height: 40,
+              height: 150,
               width: double.infinity,
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 50,
-                    child: _signOutButton(),
-                  ),
-                  Container(
-                    height: 40,
-                    color: Colors.grey,
-                  ),
-                  Container(
-                    height: 50,
-                    child: _deleteUserButton(),
-                  ),
+                  _changeUserName(),
+                  _signOutButton(),
+                  _deleteUserButton(),
                 ],
               ),
             ),
