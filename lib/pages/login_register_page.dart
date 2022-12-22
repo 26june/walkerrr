@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = "";
-  bool _isLogin = false; // Login/Register button text change
+  bool _isLogin = true; // Login/Register button text change
   bool _isVisible = true; // Show/Hide password
   bool _dontStore = false; // Secure Storage will not be updated
 
@@ -42,9 +42,9 @@ class _LoginPageState extends State<LoginPage> {
     _controllerDisplayName.text = await _secureStorage.getDisplayName() ?? '';
     _controllerEmail.text = await _secureStorage.getEmail() ?? '';
     _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
-    setState(() {
-      _isLogin = true;
-    });
+    // setState(() {
+    //   _isLogin = true;
+    // });
   }
 
   // Future<void> setSecureStorageData() async {

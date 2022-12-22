@@ -30,19 +30,20 @@ class SingleQuest extends StatefulWidget {
   State<SingleQuest> createState() => _SingleQuestState();
 }
 
-final currentQuests = userObject["quests"];
-
 class _SingleQuestState extends State<SingleQuest> {
   int questOffset = 0;
   bool isButtonActive = true;
   String buttonText = "Start Quest?";
+  final currentQuests = userObject["quests"];
   @override
   Widget build(BuildContext context) {
-    currentQuests.forEach((quest) => {
-          quest["questTitle"] == widget.questTitle
-              ? isButtonActive = false
-              : null
-        });
+    if (currentQuests != null) {
+      currentQuests.forEach((quest) => {
+            quest["questTitle"] == widget.questTitle
+                ? isButtonActive = false
+                : null
+          });
+    }
     final progessCalc = isButtonActive
         ? 0
         : (widget.questCurrent - questOffset) / widget.questGoal;
