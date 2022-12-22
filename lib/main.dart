@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:walkerrr/providers/user_provider.dart';
+import 'package:walkerrr/services/api_connection.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
 import 'widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +15,13 @@ void setLocalUserObject() async {
   } catch (e) {
     print(e);
   }
+}
+
+Future<void> refreshedApp() async {
+  final user = await getUserFromDB(userObject["uid"]);
+  await UserContext().updateUserObject(jsonDecode(user));
+  await Future.delayed(const Duration(seconds: 2));
+  print("Refreshed app and loaded $user");
 }
 
 Future<void> main() async {
