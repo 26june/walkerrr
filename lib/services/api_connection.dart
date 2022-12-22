@@ -35,6 +35,16 @@ Future getUserFromDB(uid) async {
   return parsedUser;
 }
 
+Future<void> patchUsername(uid, newUsername) async {
+  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  await http.patch(url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: jsonEncode({'displayName': newUsername}));
+}
+
 Future<void> patchQuestsToDB(uid, newQuest) async {
   final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
   final currentQuests = userObject["quests"];
@@ -46,17 +56,6 @@ Future<void> patchQuestsToDB(uid, newQuest) async {
       body: jsonEncode({
         'quests': [...currentQuests, newQuest]
       }));
-}
-
-Future<void> patchCoins(uid, increment) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
-  final currentCoins = userObject["coins"];
-  await http.patch(url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: jsonEncode({'coins': currentCoins + increment}));
 }
 
 Future<void> patchComplete(uid, currentQuest) async {
@@ -76,6 +75,17 @@ Future<void> patchComplete(uid, currentQuest) async {
         'Accept': 'application/json'
       },
       body: jsonEncode({'quests': currentQuests}));
+}
+
+Future<void> patchCoins(uid, increment) async {
+  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final currentCoins = userObject["coins"];
+  await http.patch(url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: jsonEncode({'coins': currentCoins + increment}));
 }
 
 Future<void> patchTrophiesToDB(uid, newTrophy) async {
