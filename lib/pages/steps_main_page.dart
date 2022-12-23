@@ -81,6 +81,7 @@ class MainPedometerState extends State<MainPedometer>
     super.build(context);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: WillPopScope(
         onWillPop: () async {
           if (isDialOpen.value) {
@@ -90,6 +91,7 @@ class MainPedometerState extends State<MainPedometer>
           return true;
         },
         child: Scaffold(
+          
           floatingActionButton: SpeedDial(
             icon: Icons.add,
             activeIcon: Icons.close,
