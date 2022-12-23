@@ -254,11 +254,9 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         suffixIcon: IconButton(
-          icon: (_isLogin)
-              ? Icon(
-                  _isVisible ? Icons.visibility : Icons.visibility_off,
-                )
-              : Container(),
+          icon: Icon(
+            _isVisible ? Icons.visibility : Icons.visibility_off,
+          ),
           onPressed: () {
             setState(() {
               _isVisible = !_isVisible;
@@ -280,8 +278,8 @@ class _LoginPageState extends State<LoginPage> {
       controller: _controllerPasswordConfirm,
       cursorColor: Colors.green,
       decoration: InputDecoration(
-        hintText: 'Re-type',
-        hintStyle: const TextStyle(
+        hintText: 'Re-type password',
+        hintStyle: TextStyle(
           color: Colors.black26,
           fontSize: 12,
           fontWeight: FontWeight.w400,
@@ -297,25 +295,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
         prefixIcon: const Icon(
           Icons.password_outlined,
-          color: Colors.white24,
         ),
         label: const Text(
-          'Confirm',
+          'Confirm password',
           style: TextStyle(
             color: Colors.black54,
             letterSpacing: 0.5,
             fontSize: 14,
           ),
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isVisible ? Icons.visibility : Icons.visibility_off,
-          ),
-          onPressed: () {
-            setState(() {
-              _isVisible = !_isVisible;
-            });
-          },
         ),
       ),
     );
@@ -330,10 +317,6 @@ class _LoginPageState extends State<LoginPage> {
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green, foregroundColor: Colors.white),
         onPressed: () {
-          // print('========= controler tex:t $_controllerPassword.text');
-          // print('========= confirm: $_passwordConfirm');
-          // print('========= passw: $_password');
-          // print('========= isLogin: $_isLogin');
           if (_formKey.currentState!.validate()) {
             if (_isLogin) _submitValidation();
             {
@@ -456,26 +439,20 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         child: _entryFieldEmail("Your email", _controllerEmail),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 90,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: _entryFieldPassword(
-                              "Enter password", _controllerPassword),
+                      Container(
+                        height: 80,
+                        width: double.infinity,
+                        child: _entryFieldPassword(
+                            "Enter password", _controllerPassword),
+                      ),
+                      if (!_isLogin)
+                        Container(
+                          height: 80,
+                          width: double.infinity,
+                          child: _entryFieldPasswordConfirm(
+                              "Re-type password", _controllerPasswordConfirm),
                         ),
-                        if (!_isLogin)
-                          Expanded(
-                              child: _entryFieldPasswordConfirm(
-                                  "Re-type password",
-                                  _controllerPasswordConfirm)),
-                      ],
-                    ),
+                    ],
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
