@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/single_inv_item.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 
 class WalkerInventory extends StatefulWidget {
@@ -12,42 +14,23 @@ class _WalkerInventoryState extends State<WalkerInventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Shop'),
-            Text('Coins: ${userObject["coins"]}'),
-          ],
+
+      appBar: AppBar(title: const Text("Inventory"),backgroundColor: GlobalStyleVariables.invAppBarColour ),
+      backgroundColor: GlobalStyleVariables.invBackgroundColour,
+      body: GridView.count(
+        crossAxisCount: 5,
+        children: const [
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(asset: "assets/images/Egg.png",),
+        ],
         ),
-      ),
-      body: Stack(
-          children: List<Widget>.empty(growable: true)
-            ..add(
-              Image.asset(
-                "assets/images/shelf.png",
-                height: MediaQuery.of(context).size.height,
-                fit: BoxFit.cover,
-              ),
-            )
-            ..add(Transform.translate(
-                offset: const Offset(0, 100),
-                child: Image.asset("assets/images/Egg.png")))
-            ..add(Transform.translate(
-                offset: const Offset(100, 100),
-                child: Image.asset("assets/images/Pancake.png")))
-            ..add(Transform.translate(
-                offset: const Offset(100, 250),
-                child: Image.asset("assets/images/Egg.png")))
-            ..add(Transform.translate(
-                offset: const Offset(0, 400),
-                child: Image.asset("assets/images/Egg.png")))
-            ..add(Transform.translate(
-                offset: const Offset(0, 550),
-                child: Image.asset("assets/images/Egg.png")))
-            ..add(Transform.translate(
-                offset: const Offset(0, 700),
-                child: Image.asset("assets/images/Egg.png")))),
-    );
   }
 }

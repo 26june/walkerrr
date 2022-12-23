@@ -145,14 +145,6 @@ class MainPedometerState extends State<MainPedometer>
                   style: TextStyle(fontSize: 30),
                 ),
                 Image.asset(status == "walking" ? "assets/images/__Run.gif" : "assets/images/__Idle.gif", scale: 0.5,),
-                Center(
-                  child: Text(
-                    status,
-                    style: status == 'walking' || status == 'stopped'
-                        ? const TextStyle(fontSize: 30)
-                        : const TextStyle(fontSize: 20, color: Colors.red),
-                  ),
-                )
               ],
             ),
           ),
