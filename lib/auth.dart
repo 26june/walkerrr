@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:walkerrr/main.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
@@ -20,6 +21,7 @@ class Auth {
     final userFromDB = await getUserFromDB(uid);
     UserContext().updateUserObject(userFromDB);
     SecureStorage().setUserObject(userObject);
+    setLocalUserObject();
   }
 
   Future<void> createUserWithEmailAndPassword({
