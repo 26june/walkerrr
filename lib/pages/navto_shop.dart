@@ -13,19 +13,18 @@ class _WalkerShopState extends State<WalkerShop> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shop"),
+        title: const Text("Shop"),
       ),
       body: GridView.count(
         crossAxisCount: 2,
-        children: [
+        children: const [
           SingleShopItem(name: "Pizza", price: 100, assetName: "Pizza"),
           SingleShopItem(name: "Egg", price: 200, assetName: "Egg"),
           SingleShopItem(name: "Pancake", price: 200, assetName: "Pancake"),
           SingleShopItem(name: "Sandwich", price: 200, assetName: "Sandwich"),
           SingleShopItem(name: "Sushi", price: 200, assetName: "Sushi"),
-
-          ],
-        ),
+        ],
+      ),
     );
   }
 }

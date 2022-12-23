@@ -205,9 +205,8 @@ class _HomePageState extends State<HomePage> {
               height: 50,
               width: double.infinity,
               child: Row(
-                children: [
-                  const Text('Welcome to Walkerrr!',
-                      style: TextStyle(fontSize: 24)),
+                children: const [
+                  Text('Welcome to Walkerrr!', style: TextStyle(fontSize: 24)),
                 ],
               ),
             ),
