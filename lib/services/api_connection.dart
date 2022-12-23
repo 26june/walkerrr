@@ -4,8 +4,12 @@ import 'package:walkerrr/providers/user_provider.dart';
 
 const baseAPI = 'https://walking-backend.onrender.com';
 
+const eddy = '192.168.1.25:9095';
+const david = '192.168.0.47:9095';
+const gj = '192.168.1.13:9095';
+
 Future<void> postUser(postedEmail, uid, displayname) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users');
+  final url = Uri.http(eddy, '/api/users');
   await http.post(url,
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +21,7 @@ Future<void> postUser(postedEmail, uid, displayname) async {
 }
 
 Future<void> deleteUserDB(uid) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final url = Uri.http(eddy, '/api/users/$uid');
   await http.delete(url, headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -26,7 +30,7 @@ Future<void> deleteUserDB(uid) async {
 }
 
 Future getUserFromDB(uid) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final url = Uri.http(eddy, '/api/users/$uid');
   final user = await http.get(url, headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -36,7 +40,7 @@ Future getUserFromDB(uid) async {
 }
 
 Future<void> patchUsername(uid, newUsername) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final url = Uri.http(eddy, '/api/users/$uid');
   await http.patch(url,
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +50,7 @@ Future<void> patchUsername(uid, newUsername) async {
 }
 
 Future<void> patchQuestsToDB(uid, newQuest) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final url = Uri.http(eddy, '/api/users/$uid');
   final currentQuests = userObject["quests"];
   await http.patch(url,
       headers: {
@@ -59,7 +63,7 @@ Future<void> patchQuestsToDB(uid, newQuest) async {
 }
 
 Future<void> patchComplete(uid, currentQuest) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final url = Uri.http(eddy, '/api/users/$uid');
   final currentQuests = userObject["quests"];
   final removeable = [];
   currentQuests.asMap().forEach((index, quest) => {
@@ -78,7 +82,7 @@ Future<void> patchComplete(uid, currentQuest) async {
 }
 
 Future<void> patchCoins(uid, increment) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final url = Uri.http(eddy, '/api/users/$uid');
   final currentCoins = userObject["coins"];
   await http.patch(url,
       headers: {
@@ -89,7 +93,7 @@ Future<void> patchCoins(uid, increment) async {
 }
 
 Future<void> patchTrophiesToDB(uid, newTrophy) async {
-  final url = Uri.http("192.168.0.47:9095", '/api/users/$uid');
+  final url = Uri.http(eddy, '/api/users/$uid');
   final currentTrophies = userObject["tropies"];
   await http.patch(url,
       headers: {

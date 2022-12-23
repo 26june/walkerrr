@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SingleShopItem extends StatefulWidget {
-  const SingleShopItem({super.key, required this.name, required this.price, required this.assetName});
+  const SingleShopItem(
+      {super.key,
+      required this.name,
+      required this.price,
+      required this.assetName});
 
   final String name;
   final String assetName;
@@ -15,18 +19,21 @@ class _SingleShopItemState extends State<SingleShopItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       height: double.infinity,
       width: double.infinity,
       color: Colors.grey,
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: Column(children: [
-        Image.asset("assets/images/${widget.assetName}.png",scale: 0.5),
-        SizedBox(height: 10,),
-        Text("${widget.name}"),
+        Image.asset("assets/images/${widget.assetName}.png", scale: 0.5),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(widget.name),
         Text("Price: ${widget.price} Coins"),
-        SizedBox(height: 10,),
-        ElevatedButton(onPressed: () {}, child: Text("Buy"))
+        const SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(onPressed: () {}, child: const Text("Buy"))
       ]),
     );
   }
