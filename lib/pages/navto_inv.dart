@@ -14,23 +14,45 @@ class _WalkerInventoryState extends State<WalkerInventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: AppBar(title: const Text("Inventory"),backgroundColor: GlobalStyleVariables.invAppBarColour ),
+      appBar: AppBar(
+          title: const Text("Inventory"),
+          backgroundColor: GlobalStyleVariables.invAppBarColour),
       backgroundColor: GlobalStyleVariables.invBackgroundColour,
       body: GridView.count(
         crossAxisCount: 5,
         children: const [
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
-          SingleInventoryItem(asset: "assets/images/Egg.png",),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
+          SingleInventoryItem(
+            asset: "assets/images/Egg.png",
+          ),
         ],
-        ),
+      ),
+    );
   }
 }
