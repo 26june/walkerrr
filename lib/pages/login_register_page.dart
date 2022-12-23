@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
       validator: _displayNameValidator,
       controller: _controllerDisplayName,
       cursorColor: Colors.green,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: 'Enter your name',
         hintStyle: TextStyle(
           color: Colors.black26,
@@ -159,15 +159,15 @@ class _LoginPageState extends State<LoginPage> {
           fontStyle: FontStyle.italic,
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green),
+          borderSide: BorderSide(color: Colors.green),
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: Colors.black26,
           ),
         ),
-        prefixIcon: const Icon(Icons.person_outline_outlined),
-        label: const Text(
+        prefixIcon: Icon(Icons.person_outline_outlined),
+        label: Text(
           'Name',
           style: TextStyle(
             color: Colors.black54,
@@ -187,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
       validator: _emailValidator,
       controller: _controllerEmail,
       cursorColor: Colors.green,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: 'Enter your email',
         hintStyle: TextStyle(
           color: Colors.black26,
@@ -196,15 +196,15 @@ class _LoginPageState extends State<LoginPage> {
           fontStyle: FontStyle.italic,
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green),
+          borderSide: BorderSide(color: Colors.green),
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             color: Colors.black26,
           ),
         ),
-        prefixIcon: const Icon(Icons.alternate_email_outlined),
-        label: const Text(
+        prefixIcon: Icon(Icons.alternate_email_outlined),
+        label: Text(
           'Email',
           style: TextStyle(
             color: Colors.black54,
@@ -230,17 +230,17 @@ class _LoginPageState extends State<LoginPage> {
       cursorColor: Colors.green,
       decoration: InputDecoration(
         hintText: 'Password',
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Colors.black26,
           fontSize: 12,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.green),
         ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
             color: Colors.black26,
           ),
         ),
@@ -281,17 +281,17 @@ class _LoginPageState extends State<LoginPage> {
       cursorColor: Colors.green,
       decoration: InputDecoration(
         hintText: 'Re-type',
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Colors.black26,
           fontSize: 12,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.green),
         ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
             color: Colors.black26,
           ),
         ),
@@ -343,9 +343,9 @@ class _LoginPageState extends State<LoginPage> {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                      duration: const Duration(seconds: 2),
+                      duration: Duration(seconds: 2),
                       backgroundColor: Colors.pink,
-                      content: const Text("Re-type both passwords!")),
+                      content: Text("Re-type both passwords!")),
                 );
               }
             }
@@ -481,7 +481,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: double.infinity,
                         height: 20,
                       ),
