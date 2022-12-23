@@ -79,9 +79,6 @@ class _HomePageState extends State<HomePage> {
     final email = await _secureStorage.getEmail() ?? '';
     final password = await _secureStorage.getPassWord() ?? '';
     final userCredentials = [displayName, email, password];
-    // setState(() {
-    //   userCredentialsState = userCredentials;
-    // });
   }
 
 // --------- User data edit ---------
