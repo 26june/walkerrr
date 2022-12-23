@@ -44,6 +44,7 @@ dependencies:
    flutter_secure_storage: ^7.0.1
    flutter_speed_dial: ^6.2.0
    form_field_validator: ^1.1.0
+   animated_styled_widget: ^0.4.6
 
 dev_dependencies:
    flutter_test:
