@@ -92,7 +92,6 @@ class MainPedometerState extends State<MainPedometer>
           return true;
         },
         child: Scaffold(
-          
           floatingActionButton: SpeedDial(
             icon: CustomIcons.icon_add,
             activeIcon: CustomIcons.icon_x,
@@ -116,7 +115,7 @@ class MainPedometerState extends State<MainPedometer>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => WalkerInventory()));
+                          builder: (context) => const WalkerInventory()));
                 },
               ),
               SpeedDialChild(
@@ -127,7 +126,7 @@ class MainPedometerState extends State<MainPedometer>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => WalkerShop()));
+                          builder: (context) => const WalkerShop()));
                 },
               ),
             ],
@@ -155,7 +154,12 @@ class MainPedometerState extends State<MainPedometer>
                   'Pedestrian status:',
                   style: TextStyle(fontSize: 30),
                 ),
-                Image.asset(status == "walking" ? "assets/images/__Run.gif" : "assets/images/__Idle.gif", scale: 0.5,),
+                Image.asset(
+                  status == "walking"
+                      ? "assets/images/__Run.gif"
+                      : "assets/images/__Idle.gif",
+                  scale: 0.5,
+                ),
               ],
             ),
           ),
