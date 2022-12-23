@@ -18,6 +18,8 @@ class SingleQuest extends StatefulWidget {
     required this.questTitle,
     required this.questGoal,
     required this.questCurrent,
+    required this.questOffset,
+    required this.questStart,
     required this.reward,
     required this.completed,
   });
@@ -25,7 +27,9 @@ class SingleQuest extends StatefulWidget {
   final String questTitle;
   final int questGoal;
   final int questCurrent;
+  final int questOffset;
   final int reward;
+  final String questStart;
   final bool completed;
 
   @override
@@ -33,7 +37,6 @@ class SingleQuest extends StatefulWidget {
 }
 
 class _SingleQuestState extends State<SingleQuest> {
-  int questOffset = 0;
   bool isButtonActive = true;
   String buttonText = "Start Quest?";
   final currentQuests = userObject["quests"];
@@ -52,7 +55,9 @@ class _SingleQuestState extends State<SingleQuest> {
     }
     final progessCalc = isButtonActive
         ? 0
-        : ((widget.questCurrent - questOffset) / widget.questGoal) > 1 ? 1: (widget.questCurrent - questOffset) / widget.questGoal;
+        : ((widget.questCurrent - widget.questOffset) / widget.questGoal) > 1
+            ? 1
+            : (widget.questCurrent - widget.questOffset) / widget.questGoal;
     progessCalc >= 1.0 ? buttonText = "Claim" : null;
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -60,15 +65,17 @@ class _SingleQuestState extends State<SingleQuest> {
         child: Column(
           children: [
             Text(widget.questTitle),
-            Text("Progress: ${(progessCalc*100).toInt()}%"),
+            Text("Progress: ${(progessCalc * 100).toInt()}%"),
             LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 20,
               lineHeight: 8.0,
               percent: isButtonActive
                   ? 0
-                  : ((widget.questCurrent - questOffset) / widget.questGoal) > 1
+                  : ((widget.questCurrent - widget.questOffset) /
+                              widget.questGoal) >
+                          1
                       ? 1
-                      : ((widget.questCurrent - questOffset) /
+                      : ((widget.questCurrent - widget.questOffset) /
                           widget.questGoal),
               progressColor: Colors.blue,
             ),
@@ -76,12 +83,12 @@ class _SingleQuestState extends State<SingleQuest> {
                 onPressed: isButtonActive
                     ? () {
                         setState(() {
-                          questOffset = globalSteps.globalSteps;
                           final newQuest = {
                             "questTitle": widget.questTitle,
                             "questGoal": widget.questGoal,
                             "questOffset": globalSteps.globalSteps,
                             "questCurrent": widget.questCurrent,
+                            "questStart": widget.questStart,
                             "questReward": widget.reward,
                             "questCompleted": widget.completed
                           };
