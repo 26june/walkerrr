@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/pages/quests_tab.dart';
 import 'package:walkerrr/pages/steps_main_page.dart';
@@ -35,29 +35,11 @@ class _HomePageState extends State<HomePage> {
 
   Widget _title() {
     if (_selectedIndex == 0) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('Steps'),
-          Text('Coins: ${userObject["coins"]}'),
-        ],
-      );
+      return const Text('Steps');
     } else if (_selectedIndex == 1) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('Quests'),
-          Text('Coins: ${userObject["coins"]}'),
-        ],
-      );
+      return const Text('Quests');
     } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('Settings'),
-          Text('Coins: ${userObject["coins"]}'),
-        ],
-      );
+      return const Text('Settings');
     }
   }
 

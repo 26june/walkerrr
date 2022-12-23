@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/providers/user_provider.dart';
 
 class WalkerInventory extends StatefulWidget {
   const WalkerInventory({super.key});
@@ -11,7 +12,15 @@ class _WalkerInventoryState extends State<WalkerInventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Inventory")),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Shop'),
+            Text('Coins: ${userObject["coins"]}'),
+          ],
+        ),
+      ),
       body: Stack(
           children: List<Widget>.empty(growable: true)
             ..add(

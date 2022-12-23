@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
@@ -10,26 +11,26 @@ import 'package:firebase_core/firebase_core.dart';
 void setLocalUserObject() async {
   try {
     final user = await SecureStorage().getUserObject();
-    await UserContext().updateUserObject(jsonDecode(user));
-    print("inside func $userObject");
+    final decodedUser = jsonDecode(user);
+    if (decodedUser['uid'] == Auth().currentUser!.uid) {
+      await UserContext().updateUserObject(decodedUser);
+    } else {
+      final userFromDB = await getUserFromDB(Auth().currentUser!.uid);
+      await UserContext().updateUserObject(userFromDB);
+      await SecureStorage().setUserObject(userObject);
+    }
   } catch (e) {
     print(e);
   }
-}
-
-Future<void> refreshedApp() async {
-  final user = await getUserFromDB(userObject["uid"]);
-  await UserContext().updateUserObject(jsonDecode(user));
-  await Future.delayed(const Duration(seconds: 2));
-  print("Refreshed app and loaded $user");
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setLocalUserObject();
-
-  runApp(const MyApp());
+  Future.delayed(const Duration(seconds: 1), () {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {

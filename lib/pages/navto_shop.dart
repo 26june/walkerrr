@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkerrr/common/single_shopitem.dart';
+import 'package:walkerrr/providers/user_provider.dart';
 
 class WalkerShop extends StatefulWidget {
   const WalkerShop({super.key});
@@ -13,7 +14,13 @@ class _WalkerShopState extends State<WalkerShop> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Shop"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Shop'),
+            Text('Coins: ${userObject["coins"]}'),
+          ],
+        ),
       ),
       body: GridView.count(
         crossAxisCount: 2,
