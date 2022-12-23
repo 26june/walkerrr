@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
 import 'widget_tree.dart';
@@ -31,7 +32,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.pink),
+      theme: ThemeData(
+        colorScheme: const ColorScheme.light(
+          primary: GlobalStyleVariables.secondaryColour,
+        ),),
       home: const WidgetTree(),
     );
   }
