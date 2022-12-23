@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'dart:async';
 
 import 'package:pedometer/pedometer.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/pages/navto_inv.dart';
 import 'package:walkerrr/pages/navto_shop.dart';
 import 'package:walkerrr/providers/step_provider.dart' as global;
@@ -92,8 +93,14 @@ class MainPedometerState extends State<MainPedometer>
         },
         child: Scaffold(
           floatingActionButton: SpeedDial(
-            icon: Icons.add,
-            activeIcon: Icons.close,
+            icon: CustomIcons.icon_add,
+            activeIcon: CustomIcons.icon_x,
+
+            foregroundColor: GlobalStyleVariables.iconBorderColour,
+            backgroundColor: Colors.white,
+            
+      
+
             spacing: 3,
             openCloseDial: isDialOpen,
             renderOverlay: false,
@@ -101,7 +108,8 @@ class MainPedometerState extends State<MainPedometer>
             spaceBetweenChildren: 4,
             children: [
               SpeedDialChild(
-                child: const Icon(Icons.business_center),
+                child: Image.asset(
+              "assets/images/icon_BackPack.png", height: 24, fit: BoxFit.cover,),
                 label: "Inventory",
                 onTap: () {
                   Navigator.push(
@@ -111,7 +119,8 @@ class MainPedometerState extends State<MainPedometer>
                 },
               ),
               SpeedDialChild(
-                child: const Icon(Icons.shopping_cart),
+                child: Image.asset(
+              "assets/images/icon_Cart.png", height: 24, fit: BoxFit.cover,),
                 label: "Shop",
                 onTap: () {
                   Navigator.push(
@@ -121,6 +130,8 @@ class MainPedometerState extends State<MainPedometer>
                 },
               ),
             ],
+
+            
           ),
           body: Center(
             child: Column(

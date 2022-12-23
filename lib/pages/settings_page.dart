@@ -233,17 +233,20 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        items: const [
+        items:  [
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_walk_outlined),
+            icon: Image.asset(
+              "assets/images/icon_Lightning.png", height: 24, fit: BoxFit.cover,),
             label: "Steps",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.task_alt_outlined),
+            icon: Image.asset(
+              "assets/images/icon_Flag.png",  height: 24, fit: BoxFit.cover,),
             label: "Quests",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_outlined),
+            icon: Image.asset(
+              "assets/images/icon_Settings.png", height: 24, fit: BoxFit.cover,),
             label: "Settings",
           )
         ],
