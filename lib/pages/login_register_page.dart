@@ -138,8 +138,6 @@ class _LoginPageState extends State<LoginPage> {
   ]);
   final _passwordConfirmValidator = MultiValidator([
     RequiredValidator(errorText: 'Required'),
-    // MatchValidator(errorText: 'Passwords do not match')
-    //     .validateMatch(_password, _passwordValidator),
   ]);
 
   // Form field widgets
@@ -156,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
         hintText: 'Enter your name',
         hintStyle: TextStyle(
           color: Colors.black26,
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
@@ -171,7 +169,11 @@ class _LoginPageState extends State<LoginPage> {
         prefixIcon: const Icon(Icons.person_outline_outlined),
         label: const Text(
           'Name',
-          style: TextStyle(color: Colors.black54, letterSpacing: 0.5),
+          style: TextStyle(
+            color: Colors.black54,
+            letterSpacing: 0.5,
+            fontSize: 14,
+          ),
         ),
       ),
     );
@@ -189,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
         hintText: 'Enter your email',
         hintStyle: TextStyle(
           color: Colors.black26,
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
@@ -204,7 +206,11 @@ class _LoginPageState extends State<LoginPage> {
         prefixIcon: const Icon(Icons.alternate_email_outlined),
         label: const Text(
           'Email',
-          style: TextStyle(color: Colors.black54, letterSpacing: 0.5),
+          style: TextStyle(
+            color: Colors.black54,
+            letterSpacing: 0.5,
+            fontSize: 14,
+          ),
         ),
       ),
     );
@@ -217,14 +223,16 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       obscureText: _isVisible,
       validator: _passwordValidator,
-      onChanged: ((value) => _password = value),
+      onChanged: ((value) => (value.isEmpty)
+          ? _password = value
+          : _password = _controllerPassword.text),
       controller: _controllerPassword,
       cursorColor: Colors.green,
       decoration: InputDecoration(
         hintText: 'Password',
         hintStyle: TextStyle(
           color: Colors.black26,
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
@@ -239,7 +247,11 @@ class _LoginPageState extends State<LoginPage> {
         prefixIcon: const Icon(Icons.password_outlined),
         label: const Text(
           'Password',
-          style: TextStyle(color: Colors.black54, letterSpacing: 0.5),
+          style: TextStyle(
+            color: Colors.black54,
+            letterSpacing: 0.5,
+            fontSize: 14,
+          ),
         ),
         suffixIcon: IconButton(
           icon: (_isLogin)
@@ -271,7 +283,7 @@ class _LoginPageState extends State<LoginPage> {
         hintText: 'Re-type',
         hintStyle: TextStyle(
           color: Colors.black26,
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
@@ -289,7 +301,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
         label: const Text(
           'Confirm',
-          style: TextStyle(color: Colors.black54, letterSpacing: 0.5),
+          style: TextStyle(
+            color: Colors.black54,
+            letterSpacing: 0.5,
+            fontSize: 14,
+          ),
         ),
         suffixIcon: IconButton(
           icon: Icon(
@@ -305,25 +321,33 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Widget _errorMessage() {
-  //   return Text(errorMessage == "" ? "" : "$errorMessage");
-  // }
+  Widget _errorMessage() {
+    return Text(errorMessage == "" ? "" : "$errorMessage");
+  }
 
   Widget _submitButton() {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green, foregroundColor: Colors.white),
         onPressed: () {
+          // print('========= controler tex:t $_controllerPassword.text');
+          // print('========= confirm: $_passwordConfirm');
+          // print('========= passw: $_password');
+          // print('========= isLogin: $_isLogin');
           if (_formKey.currentState!.validate()) {
-            if (_passwordConfirm == _password || _isLogin) {
-              _submitValidation();
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    duration: const Duration(seconds: 3),
-                    backgroundColor: Colors.pink,
-                    content: const Text("Passwords don\'t match")),
-              );
+            if (_isLogin) _submitValidation();
+            {
+              if (_passwordConfirm == _password ||
+                  _passwordConfirm == _controllerPassword.text) {
+                _submitValidation();
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      duration: const Duration(seconds: 2),
+                      backgroundColor: Colors.pink,
+                      content: const Text("Re-type both passwords!")),
+                );
+              }
             }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -331,8 +355,8 @@ class _LoginPageState extends State<LoginPage> {
                   duration: const Duration(seconds: 2),
                   backgroundColor: Colors.pink,
                   content: Text(errorMessage == ""
-                      ? "Enter correct data"
-                      : "Error: $errorMessage")),
+                      ? "Check form fields!"
+                      : "Error: $errorMessage!")),
             );
           }
         },
@@ -352,7 +376,11 @@ class _LoginPageState extends State<LoginPage> {
           });
         },
         child: Text(_isLogin ? "Register Instead" : "Login Instead",
-            style: const TextStyle(color: Colors.blue, letterSpacing: 0.5)));
+            style: const TextStyle(
+              color: Colors.blue,
+              letterSpacing: 0.5,
+              fontSize: 14,
+            )));
   }
 
   Widget _dontStoreMyData() {
@@ -375,13 +403,13 @@ class _LoginPageState extends State<LoginPage> {
     return TextButton(
         onPressed: () {
           setState(() {
-            _controllerDisplayName.clear();
-            _controllerEmail.clear();
-            _controllerPassword.clear();
-            _controllerPasswordConfirm.clear();
-            _formKey.currentState?.reset();
             errorMessage = '';
+            _formKey.currentState?.reset();
           });
+          _controllerDisplayName.clear();
+          _controllerEmail.clear();
+          _controllerPassword.clear();
+          _controllerPasswordConfirm.clear();
         },
         child: const Text(
           "Clear Form",
