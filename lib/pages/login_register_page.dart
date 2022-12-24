@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -405,6 +406,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         appBar: AppBar(
           title: _title(),
+          backgroundColor: GlobalStyleVariables.secondaryColour,
         ),
         body: Container(
           height: double.infinity,

@@ -40,22 +40,28 @@ class _HomePageState extends State<HomePage> {
     final newUsername = _controllerDisplayName.text;
     patchUsername(userObject['uid'], newUsername);
     _controllerDisplayName.text = newUsername;
-    isDisplayNameSaved = true;
+    setState(() {
+      isDisplayNameSaved = true;
+    });
   }
 
-  // Future<void> updateEmail() async {
-  //   final newEmail = _controllerEmail.text;
-  //   patchEmail(userObject['email'], newEmail);
-  //   _controllerEmail.text = newEmail;
-  //   isEmailSaved = true;
-  // }
+  Future<void> updateEmail() async {
+    final newEmail = _controllerEmail.text;
+    // patchEmail(userObject['email'], newEmail);
+    _controllerEmail.text = newEmail;
+    setState(() {
+      isEmailSaved = true;
+    });
+  }
 
-  // Future<void> updatePassword() async {
-  //   final newPassword = _controllerPassword.text;
-  //   patchPassword(userObject['password'], newPassword);
-  //   _controllerPassword.text = newPassword;
-  //   isPasswordSaved = true;
-  // }
+  Future<void> updatePassword() async {
+    final newPassword = _controllerPassword.text;
+    // patchPassword(userObject['password'], newPassword);
+    _controllerPassword.text = newPassword;
+    setState(() {
+      isPasswordSaved = true;
+    });
+  }
 
   // <=============
 
@@ -69,7 +75,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-// ==================== User settings page ====================
+// ==================== USER SETTINGS PAGE ====================
 
 // --------- Secure storage ---------
 
@@ -137,7 +143,16 @@ class _HomePageState extends State<HomePage> {
   bool isDisplayNameEditingEnabled = false;
   bool isEmailEditingEnabled = false;
   bool isPasswordEditingEnabled = false;
-  bool isFormLocked = true;
+  bool isEditingEnabled = false;
+
+  bool isDisplayNameFocused = false;
+  bool isEmailFocused = false;
+  bool isPasswordFocused = false;
+  bool isPasswordConfirmFocused = false;
+
+  bool isDisplayNameChanged = false;
+  bool isEmailChanged = false;
+  bool isPasswordChanged = false;
 
   bool isDisplayNameSaved = true;
   bool isEmailSaved = true;
@@ -146,249 +161,337 @@ class _HomePageState extends State<HomePage> {
 
   bool isObscure = true;
 
+  String? newDisplayName = '';
+  String? newEmail = '';
+  String? newPassword = '';
+
   Widget _entryFieldDisplayName(
     String displayName,
     TextEditingController _controllerDisplayName,
   ) {
-    return TextFormField(
-      enabled: isDisplayNameEditingEnabled,
-      validator: _displayNameValidator,
-      controller: _controllerDisplayName,
-      cursorColor: GlobalStyleVariables.secondaryColour,
-      decoration: InputDecoration(
-        hintText: 'Enter new display name',
-        hintStyle: const TextStyle(
-          color: Colors.black26,
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.italic,
-        ),
-        filled: isDisplayNameEditingEnabled,
-        fillColor: Colors.black12,
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: GlobalStyleVariables.secondaryColour),
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black26,
-          ),
-        ),
-        disabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.white,
-          ),
-        ),
-        icon: const Icon(Icons.person_outline_outlined),
-        suffixIcon: IconButton(
-          icon: Icon(
-            !isDisplayNameEditingEnabled
-                ? Icons.toggle_off_outlined
-                : !isDisplayNameSaved
-                    ? Icons.toggle_on_rounded
-                    : Icons.task_alt_outlined,
-          ),
-          onPressed: () {
-            updateUserName();
+    return Focus(
+        onFocusChange: (hasFocus) {
+          if (hasFocus) {
             setState(() {
-              isDisplayNameEditingEnabled = false;
+              isDisplayNameFocused = true;
+              print(
+                  'isDisplayNameFocused ================ $isDisplayNameFocused');
             });
-          },
-        ),
-      ),
-    );
+          } else {
+            setState(() {
+              isDisplayNameFocused = false;
+              print(
+                  'isDisplayNameFocused ================ $isDisplayNameFocused');
+            });
+          }
+        },
+        child: TextFormField(
+          enabled: isDisplayNameEditingEnabled,
+          validator: _displayNameValidator,
+          onChanged: ((value) => {
+                setState(
+                  () {
+                    isDisplayNameChanged = true;
+                    newDisplayName = value;
+                    print(
+                        'isDisplayNameChanged ================ $isDisplayNameChanged');
+                  },
+                )
+              }),
+          controller: _controllerDisplayName,
+          cursorColor: GlobalStyleVariables.secondaryColour,
+          decoration: InputDecoration(
+            hintText: 'Enter new display name',
+            hintStyle: const TextStyle(
+              color: Colors.black26,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.italic,
+            ),
+            filled: isDisplayNameFocused,
+            fillColor: Colors.black12,
+            focusedBorder: const UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: GlobalStyleVariables.secondaryColour),
+            ),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black26,
+              ),
+            ),
+            disabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white,
+              ),
+            ),
+            icon: const Icon(Icons.person_outline_outlined),
+            suffixIcon: IconButton(
+              icon: Icon(
+                !isDisplayNameEditingEnabled
+                    ? Icons.toggle_off_outlined
+                    : !isDisplayNameChanged
+                        ? Icons.toggle_on_rounded
+                        : !isDisplayNameSaved
+                            ? Icons.toggle_off_outlined
+                            : Icons.save_outlined,
+              ),
+              onPressed: () {
+                updateUserName();
+                setState(() {
+                  print(
+                      'isDisplayNameSaved ================ $isDisplayNameSaved');
+                  isDisplayNameEditingEnabled = false;
+                  print(
+                      'isDisplayNameSaved ================ $isDisplayNameSaved');
+                });
+              },
+            ),
+          ),
+        ));
   }
 
   Widget _entryFieldEmail(
     String email,
     TextEditingController _controllerEmail,
   ) {
-    return TextFormField(
-      enabled: isEmailEditingEnabled,
-      validator: _emailValidator,
-      controller: _controllerEmail,
-      cursorColor: GlobalStyleVariables.secondaryColour,
-      decoration: InputDecoration(
-        hintText: 'Enter new email',
-        hintStyle: const TextStyle(
-          color: Colors.black26,
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.italic,
-        ),
-        filled: isEmailEditingEnabled,
-        fillColor: Colors.black12,
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: GlobalStyleVariables.secondaryColour),
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black26,
-          ),
-        ),
-        disabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.white,
-          ),
-        ),
-        icon: const Icon(Icons.alternate_email_outlined),
-        suffixIcon: IconButton(
-          icon: Icon(
-            !isEmailEditingEnabled
-                ? Icons.toggle_off_outlined
-                : !isEmailSaved
-                    ? Icons.toggle_on_rounded
-                    : Icons.task_alt_outlined,
-          ),
-          onPressed: () {
-            // updateEmail();
+    return Focus(
+        onFocusChange: (hasFocus) {
+          if (hasFocus) {
             setState(() {
-              isEmailEditingEnabled = false;
+              isEmailFocused = true;
             });
-          },
-        ),
-      ),
-    );
+          } else {
+            setState(() {
+              isEmailFocused = false;
+            });
+          }
+        },
+        child: TextFormField(
+          enabled: isEmailEditingEnabled,
+          validator: _emailValidator,
+          onChanged: ((value) => {
+                setState(
+                  () {
+                    isEmailChanged = true;
+                    newEmail = value;
+                  },
+                )
+              }),
+          controller: _controllerEmail,
+          cursorColor: GlobalStyleVariables.secondaryColour,
+          decoration: InputDecoration(
+            hintText: 'Enter new email',
+            hintStyle: const TextStyle(
+              color: Colors.black26,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.italic,
+            ),
+            filled: isEmailFocused,
+            fillColor: Colors.black12,
+            focusedBorder: const UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: GlobalStyleVariables.secondaryColour),
+            ),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black26,
+              ),
+            ),
+            disabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white,
+              ),
+            ),
+            icon: const Icon(Icons.alternate_email_outlined),
+            suffixIcon: IconButton(
+              icon: Icon(
+                !isEmailEditingEnabled
+                    ? Icons.toggle_off_outlined
+                    : !isEmailChanged
+                        ? Icons.toggle_on_rounded
+                        : !isEmailSaved
+                            ? Icons.toggle_off_outlined
+                            : Icons.save_outlined,
+              ),
+              onPressed: () {
+                updateEmail();
+                setState(() {
+                  isEmailSaved = true;
+                  print('isEmailSaved ================ $isEmailSaved');
+                  isEmailEditingEnabled = false;
+                  print('isEmailSaved ================ $isEmailSaved');
+                });
+              },
+            ),
+          ),
+        ));
   }
 
   Widget _entryFieldPassword(
     String password,
     TextEditingController _controllerPassword,
   ) {
-    return TextFormField(
-      enabled: isPasswordEditingEnabled,
-      obscureText: isObscure,
-      validator: _passwordValidator,
-      onChanged: ((value) => (value.isEmpty)
-          ? _password = value
-          : _password = _controllerPassword.text),
-      controller: _controllerPassword,
-      cursorColor: GlobalStyleVariables.secondaryColour,
-      decoration: InputDecoration(
-        hintText: 'Change your password',
-        hintStyle: const TextStyle(
-          color: Colors.black26,
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.italic,
-        ),
-        filled: isPasswordEditingEnabled,
-        fillColor: Colors.black12,
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: GlobalStyleVariables.secondaryColour),
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black26,
-          ),
-        ),
-        disabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.white,
-          ),
-        ),
-        icon: const Icon(Icons.password_outlined),
-        suffixIcon: IconButton(
-          icon: Icon(
-            !isPasswordEditingEnabled
-                ? Icons.toggle_off_outlined
-                : !isPasswordSaved
-                    ? Icons.toggle_on_rounded
-                    : Icons.task_alt_outlined,
-          ),
-          onPressed: () {
-            // updatePassword();
+    return Focus(
+        onFocusChange: (hasFocus) {
+          if (hasFocus) {
             setState(() {
-              isPasswordEditingEnabled = false;
+              isPasswordFocused = true;
             });
-          },
-        ),
-      ),
-    );
+          } else {
+            setState(() {
+              isPasswordFocused = false;
+            });
+          }
+        },
+        child: TextFormField(
+          enabled: isPasswordEditingEnabled,
+          obscureText: isObscure,
+          validator: _passwordValidator,
+          onChanged: ((value) => {
+                setState(
+                  () {
+                    isPasswordChanged = true;
+                    newPassword = value;
+                  },
+                )
+              }),
+          controller: _controllerPassword,
+          cursorColor: GlobalStyleVariables.secondaryColour,
+          decoration: InputDecoration(
+            hintText: 'Change your password',
+            hintStyle: const TextStyle(
+              color: Colors.black26,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.italic,
+            ),
+            filled: isPasswordFocused,
+            fillColor: Colors.black12,
+            focusedBorder: const UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: GlobalStyleVariables.secondaryColour),
+            ),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black26,
+              ),
+            ),
+            disabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white,
+              ),
+            ),
+            icon: const Icon(Icons.password_outlined),
+            suffixIcon: IconButton(
+              icon: Icon(
+                !isPasswordEditingEnabled
+                    ? Icons.toggle_off_outlined
+                    : !isPasswordChanged
+                        ? Icons.toggle_on_rounded
+                        : !isPasswordSaved
+                            ? Icons.toggle_off_outlined
+                            : Icons.save_outlined,
+              ),
+              onPressed: () {
+                updateUserName();
+                setState(() {
+                  isPasswordSaved = true;
+                  print('isPasswordSaved ================ $isPasswordSaved');
+                  isPasswordEditingEnabled = false;
+                  print('isPasswordSaved ================ $isPasswordSaved');
+                });
+              },
+            ),
+          ),
+        ));
   }
 
   Widget _entryFieldPasswordConfirm(
     String passwordConfirm,
     TextEditingController _controllerPasswordConfirm,
   ) {
-    return TextFormField(
-      enabled: isPasswordEditingEnabled,
-      obscureText: isObscure,
-      validator: _passwordConfirmValidator,
-      onChanged: ((value) => _passwordConfirm = value),
-      controller: _controllerPasswordConfirm,
-      cursorColor: GlobalStyleVariables.secondaryColour,
-      decoration: InputDecoration(
-        hintText: 'Re-type your new password',
-        hintStyle: const TextStyle(
-          color: Colors.black26,
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.italic,
-        ),
-        filled: isPasswordEditingEnabled,
-        fillColor: Colors.black12,
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: GlobalStyleVariables.secondaryColour),
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black26,
-          ),
-        ),
-        disabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.white,
-          ),
-        ),
-        icon: const Icon(
-          Icons.password_outlined,
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(
-            isObscure ? Icons.visibility : Icons.visibility_off,
-          ),
-          onPressed: () {
+    return Focus(
+        onFocusChange: (hasFocus) {
+          if (hasFocus) {
             setState(() {
-              isObscure = !isObscure;
+              isPasswordConfirmFocused = true;
             });
-          },
-        ),
-      ),
-    );
+          } else {
+            setState(() {
+              isPasswordConfirmFocused = false;
+            });
+          }
+        },
+        child: TextFormField(
+          enabled: isPasswordEditingEnabled,
+          obscureText: isObscure,
+          validator: _passwordConfirmValidator,
+          onChanged: ((value) => _passwordConfirm = value),
+          controller: _controllerPasswordConfirm,
+          cursorColor: GlobalStyleVariables.secondaryColour,
+          decoration: InputDecoration(
+            hintText: 'Re-type your new password',
+            hintStyle: const TextStyle(
+              color: Colors.black26,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.italic,
+            ),
+            filled: isPasswordConfirmFocused,
+            fillColor: Colors.black12,
+            focusedBorder: const UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: GlobalStyleVariables.secondaryColour),
+            ),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black26,
+              ),
+            ),
+            disabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white,
+              ),
+            ),
+            icon: const Icon(
+              Icons.password_outlined,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                isObscure ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: () {
+                setState(() {
+                  isObscure = !isObscure;
+                });
+              },
+            ),
+          ),
+        ));
   }
 
 // <=============
 
 // ============= Buttons =============>
 
-  // Widget _signOutButton() {
-  //   return ElevatedButton(
-  //     onPressed: signOut,
-  //     style: ElevatedButton.styleFrom(
-  //         backgroundColor: GlobalStyleVariables.secondaryColour, foregroundColor: Colors.white),
-  //     child: const Text("Sign Out"),
-  //   );
-  // }
-
-  // Widget _deleteUserButton() {
-  //   return ElevatedButton(
-  //     style: ElevatedButton.styleFrom(
-  //         backgroundColor: Colors.red[600], foregroundColor: Colors.white),
-  //     onPressed: deleteUser,
-  //     child: const Text("Delete Account"),
-  //   );
-  // }
-
-  // Widget _changeUserName() {
-  //   return ElevatedButton(
-  //     style: ElevatedButton.styleFrom(
-  //         backgroundColor: Colors.blue[600], foregroundColor: Colors.white),
-  //     onPressed: updateUserName,
-  //     child: const Text("Change Username"),
-  //   );
-  // }
-
   int _selectedIndex = 0;
+
+  Widget _deleteUserButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text('DANGER ZONE:'),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red[600], foregroundColor: Colors.white),
+          onPressed: (() => deleteUser()),
+          child: const Text("Delete Account"),
+        ),
+      ],
+    );
+  }
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
@@ -439,7 +542,7 @@ class _HomePageState extends State<HomePage> {
       isDisplayNameEditingEnabled = true;
       isEmailEditingEnabled = true;
       isPasswordEditingEnabled = true;
-      isFormLocked = false;
+      isEditingEnabled = true;
       isFormSaved = false;
     });
   }
@@ -449,7 +552,7 @@ class _HomePageState extends State<HomePage> {
       isDisplayNameEditingEnabled = false;
       isEmailEditingEnabled = false;
       isPasswordEditingEnabled = false;
-      isFormLocked = true;
+      isEditingEnabled = false;
       isObscure = true;
     });
   }
@@ -457,7 +560,6 @@ class _HomePageState extends State<HomePage> {
   // <=============
 
   // ============= Pages =============>
-  ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -468,11 +570,11 @@ class _HomePageState extends State<HomePage> {
         // Page 2
         height: double.infinity,
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(30),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(
                 width: double.infinity,
@@ -527,9 +629,16 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           height: 80,
                           width: double.infinity,
-                          child: !isFormLocked
+                          child: isEditingEnabled
                               ? _entryFieldPasswordConfirm("Re-type password",
                                   _controllerPasswordConfirm)
+                              : Container(),
+                        ),
+                        Container(
+                          height: 40,
+                          width: double.infinity,
+                          child: isEditingEnabled
+                              ? _deleteUserButton()
                               : Container(),
                         ),
                       ],
@@ -537,134 +646,122 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  SpeedDial(
-                    icon: Icons.person_outlined,
-                    activeIcon: Icons.close,
-                    spacing: 3,
-                    openCloseDial: isDialOpen,
-                    renderOverlay: false,
-                    closeManually: false,
-                    spaceBetweenChildren: 4,
-                    backgroundColor: GlobalStyleVariables.secondaryColour,
-                    visible: true,
-                    curve: Curves.bounceInOut,
-                    children: [
-                      SpeedDialChild(
-                        child: const Icon(Icons.edit_note, color: Colors.white),
-                        backgroundColor: GlobalStyleVariables.secondaryColour,
-                        onTap: () => {
-                          (isFormLocked) ? enableEditing() : disableEditing()
-                        },
-                        label: 'Edit profile',
-                        labelStyle: const TextStyle(
-                            fontWeight: FontWeight.w500, color: Colors.white),
-                        labelBackgroundColor:
-                            GlobalStyleVariables.secondaryColour,
-                      ),
-                      SpeedDialChild(
-                        child: const Icon(Icons.logout, color: Colors.white),
-                        backgroundColor: Colors.green,
-                        onTap: () => signOut(),
-                        label: 'Sign Out',
-                        labelStyle: const TextStyle(
-                            fontWeight: FontWeight.w500, color: Colors.white),
-                        labelBackgroundColor: Colors.green,
-                      ),
-                      SpeedDialChild(
-                        child: const Icon(Icons.delete_forever_outlined,
-                            color: Colors.white),
-                        backgroundColor: Colors.red[800],
-                        onTap: () => deleteUser(),
-                        label: 'Delete account',
-                        labelStyle: const TextStyle(
-                            fontWeight: FontWeight.w500, color: Colors.white),
-                        labelBackgroundColor: Colors.red[800],
-                      ),
-                      SpeedDialChild(
-                        child: const Icon(Icons.delete_forever_outlined,
-                            color: Colors.white),
-                        backgroundColor: Colors.red[800],
-                        onTap: () => deleteUser(),
-                        label: 'Delete account',
-                        labelStyle: const TextStyle(
-                            fontWeight: FontWeight.w500, color: Colors.white),
-                        labelBackgroundColor: Colors.red[800],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ],
           ),
         ),
       ),
     ];
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (isDialOpen.value) {
-          isDialOpen.value = false;
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: _title(),
-        ),
-        body: PageView(
-          controller: controller,
-          children: _pages,
-          onPageChanged: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/images/icon_Lightning.png",
-                height: 24,
-                fit: BoxFit.cover,
-              ),
-              label: "Steps",
+    return Scaffold(
+      appBar: AppBar(
+        title: _title(),
+        backgroundColor: GlobalStyleVariables.secondaryColour,
+        actions: <Widget>[
+          if (_selectedIndex == 2)
+            PopupMenuButton<int>(
+              enabled: true,
+              elevation: 4,
+              offset: Offset(0, 58),
+              shape: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white24, width: 1)),
+              onCanceled: () {
+                //check if all changes saved
+                disableEditing();
+              },
+              onSelected: (value) {
+                if (value == 1) {
+                  enableEditing();
+                  print('isEditingEnabled ================ $isEditingEnabled');
+                  ;
+                } else if (value == 2) {
+                  signOut();
+                }
+              },
+              icon: const Icon(Icons.account_circle),
+              color: GlobalStyleVariables.secondaryColour,
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.edit_note),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text("Edit profile",
+                          style: TextStyle(
+                            color: Colors.white,
+                          )),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.logout_outlined),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        "Sign Out",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/images/icon_Flag.png",
-                height: 24,
-                fit: BoxFit.cover,
-              ),
-              label: "Quests",
+        ],
+      ),
+      body: PageView(
+        controller: controller,
+        children: _pages,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              "assets/images/icon_Lightning.png",
+              height: 24,
+              fit: BoxFit.cover,
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/images/icon_Settings.png",
-                height: 24,
-                fit: BoxFit.cover,
-              ),
-              label: "Settings",
-            )
-          ],
-          onTap: (index) {
-            controller.jumpToPage(index);
+            label: "Steps",
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              "assets/images/icon_Flag.png",
+              height: 24,
+              fit: BoxFit.cover,
+            ),
+            label: "Quests",
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              "assets/images/icon_Settings.png",
+              height: 24,
+              fit: BoxFit.cover,
+            ),
+            label: "Settings",
+          )
+        ],
+        onTap: (index) {
+          controller.jumpToPage(index);
 
-            /// Switching the PageView tabs
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
+          /// Switching the PageView tabs
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
 }
-
-// <=============
