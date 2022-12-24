@@ -25,10 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerPasswordConfirm =
       TextEditingController();
 
-  // final String _keyDisplayName = 'displayName';
-  // final String _keyEmail = 'email';
-  // final String _keyPassWord = 'password';
-
   final SecureStorage _secureStorage = SecureStorage();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -277,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
       onChanged: ((value) => _passwordConfirm = value),
       controller: _controllerPasswordConfirm,
       cursorColor: Colors.green,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: 'Re-type password',
         hintStyle: TextStyle(
           color: Colors.black26,
@@ -285,18 +281,18 @@ class _LoginPageState extends State<LoginPage> {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        focusedBorder: const UnderlineInputBorder(
+        focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.green),
         ),
-        enabledBorder: const UnderlineInputBorder(
+        enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.black26,
           ),
         ),
-        prefixIcon: const Icon(
+        prefixIcon: Icon(
           Icons.password_outlined,
         ),
-        label: const Text(
+        label: Text(
           'Confirm password',
           style: TextStyle(
             color: Colors.black54,
