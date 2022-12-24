@@ -25,10 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerPasswordConfirm =
       TextEditingController();
 
-  // final String _keyDisplayName = 'displayName';
-  // final String _keyEmail = 'email';
-  // final String _keyPassWord = 'password';
-
   final SecureStorage _secureStorage = SecureStorage();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
