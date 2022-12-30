@@ -8,7 +8,6 @@ import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final PageController controller = PageController();
 
-  // ==================== User MongoDB data edit ====================>
+// ==================== User MongoDB data edit ====================>
 
   Widget _userUid() {
     return Text(user?.email ?? "User Email");
@@ -60,6 +59,7 @@ class _HomePageState extends State<HomePage> {
     _controllerPassword.text = newPassword;
     setState(() {
       isPasswordSaved = true;
+      isPasswordEditingEnabled = false;
     });
   }
 
@@ -92,8 +92,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchSecureStorageData();
-    // setSecureStorageData();
-    // deleteSecureStorageData();
   }
 
   // @override
@@ -143,6 +141,7 @@ class _HomePageState extends State<HomePage> {
   bool isDisplayNameEditingEnabled = false;
   bool isEmailEditingEnabled = false;
   bool isPasswordEditingEnabled = false;
+  bool isPasswordConfirmEditingEnabled = false;
   bool isEditingEnabled = false;
 
   bool isDisplayNameFocused = false;
@@ -153,6 +152,7 @@ class _HomePageState extends State<HomePage> {
   bool isDisplayNameChanged = false;
   bool isEmailChanged = false;
   bool isPasswordChanged = false;
+  bool isPasswordConfirmChanged = false;
 
   bool isDisplayNameSaved = true;
   bool isEmailSaved = true;
@@ -174,14 +174,10 @@ class _HomePageState extends State<HomePage> {
           if (hasFocus) {
             setState(() {
               isDisplayNameFocused = true;
-              print(
-                  'isDisplayNameFocused ================ $isDisplayNameFocused');
             });
           } else {
             setState(() {
               isDisplayNameFocused = false;
-              print(
-                  'isDisplayNameFocused ================ $isDisplayNameFocused');
             });
           }
         },
@@ -193,8 +189,6 @@ class _HomePageState extends State<HomePage> {
                   () {
                     isDisplayNameChanged = true;
                     newDisplayName = value;
-                    print(
-                        'isDisplayNameChanged ================ $isDisplayNameChanged');
                   },
                 )
               }),
@@ -238,11 +232,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 updateUserName();
                 setState(() {
-                  print(
-                      'isDisplayNameSaved ================ $isDisplayNameSaved');
                   isDisplayNameEditingEnabled = false;
-                  print(
-                      'isDisplayNameSaved ================ $isDisplayNameSaved');
                 });
               },
             ),
@@ -318,9 +308,7 @@ class _HomePageState extends State<HomePage> {
                 updateEmail();
                 setState(() {
                   isEmailSaved = true;
-                  print('isEmailSaved ================ $isEmailSaved');
                   isEmailEditingEnabled = false;
-                  print('isEmailSaved ================ $isEmailSaved');
                 });
               },
             ),
@@ -352,6 +340,8 @@ class _HomePageState extends State<HomePage> {
                 setState(
                   () {
                     isPasswordChanged = true;
+                    isPasswordConfirmEditingEnabled = true;
+                    isPasswordSaved = false;
                     newPassword = value;
                   },
                 )
@@ -384,22 +374,16 @@ class _HomePageState extends State<HomePage> {
             ),
             icon: const Icon(Icons.password_outlined),
             suffixIcon: IconButton(
-              icon: Icon(
-                !isPasswordEditingEnabled
-                    ? Icons.toggle_off_outlined
-                    : !isPasswordChanged
-                        ? Icons.toggle_on_rounded
-                        : !isPasswordSaved
-                            ? Icons.toggle_off_outlined
-                            : Icons.save_outlined,
-              ),
+              icon: Icon(!isPasswordEditingEnabled
+                  ? Icons.toggle_off_outlined
+                  : !isPasswordChanged
+                      ? Icons.toggle_on_rounded
+                      : isObscure
+                          ? Icons.visibility
+                          : Icons.visibility_off),
               onPressed: () {
-                updateUserName();
                 setState(() {
-                  isPasswordSaved = true;
-                  print('isPasswordSaved ================ $isPasswordSaved');
-                  isPasswordEditingEnabled = false;
-                  print('isPasswordSaved ================ $isPasswordSaved');
+                  isObscure = !isObscure;
                 });
               },
             ),
@@ -424,10 +408,17 @@ class _HomePageState extends State<HomePage> {
           }
         },
         child: TextFormField(
-          enabled: isPasswordEditingEnabled,
+          enabled: isPasswordConfirmEditingEnabled,
           obscureText: isObscure,
           validator: _passwordConfirmValidator,
-          onChanged: ((value) => _passwordConfirm = value),
+          onChanged: ((value) => {
+                setState(
+                  () {
+                    isPasswordConfirmChanged = true;
+                    _passwordConfirm = value;
+                  },
+                )
+              }),
           controller: _controllerPasswordConfirm,
           cursorColor: GlobalStyleVariables.secondaryColour,
           decoration: InputDecoration(
@@ -458,12 +449,15 @@ class _HomePageState extends State<HomePage> {
               Icons.password_outlined,
             ),
             suffixIcon: IconButton(
-              icon: Icon(
-                isObscure ? Icons.visibility : Icons.visibility_off,
-              ),
+              icon: Icon(!isPasswordConfirmChanged
+                  ? Icons.toggle_on_outlined
+                  : !isPasswordSaved
+                      ? Icons.save_outlined
+                      : Icons.toggle_off_outlined),
               onPressed: () {
+                updatePassword();
                 setState(() {
-                  isObscure = !isObscure;
+                  isPasswordConfirmEditingEnabled = false;
                 });
               },
             ),
@@ -552,6 +546,7 @@ class _HomePageState extends State<HomePage> {
       isDisplayNameEditingEnabled = false;
       isEmailEditingEnabled = false;
       isPasswordEditingEnabled = false;
+      isPasswordConfirmEditingEnabled = false;
       isEditingEnabled = false;
       isObscure = true;
     });
@@ -629,7 +624,7 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           height: 80,
                           width: double.infinity,
-                          child: isEditingEnabled
+                          child: isPasswordConfirmEditingEnabled
                               ? _entryFieldPasswordConfirm("Re-type password",
                                   _controllerPasswordConfirm)
                               : Container(),
@@ -671,7 +666,6 @@ class _HomePageState extends State<HomePage> {
               onSelected: (value) {
                 if (value == 1) {
                   enableEditing();
-                  print('isEditingEnabled ================ $isEditingEnabled');
                   ;
                 } else if (value == 2) {
                   signOut();
