@@ -13,7 +13,7 @@ class SecureStorage {
   // Create _secureStorage
   final _secureStorage = const FlutterSecureStorage();
 
-  // ? ---- Maping whole Secure Storage test ---
+  // ? ---- Mapping whole Secure Storage test ---
 
   // Future<Map<String, String>> _readAll() async {
   //   var map = <String, String>{};

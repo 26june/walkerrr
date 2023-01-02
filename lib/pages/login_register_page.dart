@@ -33,18 +33,10 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     fetchSecureStorageData();
-    // setSecureStorageData();
-    // deleteSecureStorageData();
   }
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
-    _controllerDisplayName.dispose();
-    _controllerEmail.dispose();
-    _controllerPassword.dispose();
-    _controllerPasswordConfirm.dispose();
     super.dispose();
   }
 
@@ -53,19 +45,6 @@ class _LoginPageState extends State<LoginPage> {
     _controllerEmail.text = await _secureStorage.getEmail() ?? '';
     _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
   }
-
-  // Future<void> setSecureStorageData() async {
-  //   await _secureStorage.write(key: _keyDisplayName);
-  //   await _secureStorage.write(key: _keyEmail);
-  //   await _secureStorage.write(key: _keyPassWord);
-  // }
-
-  // Future<void> deleteSecureStorageData() async {
-  //   await _secureStorage.delete(key: _keyDisplayName);
-  //   await _secureStorage.delete(key: _keyEmail);
-  //   await _secureStorage.delete(key: _keyPassWord);
-  // }
-
 // <========
 
 // ======== Login / Register auth =========>
@@ -137,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
     RequiredValidator(errorText: 'Required'),
   ]);
 
-  // Form field widgets
+  // ---- Form field widgets ----
 
   Widget _entryFieldDisplayName(
     String displayName,
@@ -324,7 +303,7 @@ class _LoginPageState extends State<LoginPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       duration: Duration(seconds: 2),
-                      backgroundColor: Colors.pink,
+                      backgroundColor: Colors.red,
                       content: Text("Re-type both passwords!")),
                 );
               }
@@ -333,7 +312,7 @@ class _LoginPageState extends State<LoginPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                   duration: const Duration(seconds: 2),
-                  backgroundColor: Colors.pink,
+                  backgroundColor: Colors.red,
                   content: Text(errorMessage == ""
                       ? "Check form fields!"
                       : "Error: $errorMessage!")),

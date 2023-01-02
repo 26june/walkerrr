@@ -38,33 +38,21 @@ class _HomePageState extends State<HomePage> {
   Future<void> updateUserName() async {
     final newUsername = _controllerDisplayName.text;
     patchUsername(userObject['uid'], newUsername);
-    _controllerDisplayName.text = newUsername;
-    setState(() {
-      isDisplayNameSaved = true;
-    });
   }
 
   Future<void> updateEmail() async {
     final newEmail = _controllerEmail.text;
     // patchEmail(userObject['email'], newEmail);
-    _controllerEmail.text = newEmail;
-    setState(() {
-      isEmailSaved = true;
-    });
   }
 
   Future<void> updatePassword() async {
     final newPassword = _controllerPassword.text;
     // patchPassword(userObject['password'], newPassword);
-    _controllerPassword.text = newPassword;
-    setState(() {
-      isPasswordSaved = true;
-      isPasswordEditingEnabled = false;
-    });
   }
 
   // <=============
 
+  // ---- Pages title ----
   Widget _title() {
     if (_selectedIndex == 0) {
       return const Text('Steps');
@@ -94,28 +82,15 @@ class _HomePageState extends State<HomePage> {
     fetchSecureStorageData();
   }
 
-  // @override
-  // void dispose() {
-  //   // Clean up the controller when the widget is removed from the
-  //   // widget tree.
-  //   _controllerDisplayName.dispose();
-  //   _controllerEmail.dispose();
-  //   _controllerPassword.dispose();
-  //   _controllerPasswordConfirm.dispose();
-  //   super.dispose();
-  // }
-
   Future<void> fetchSecureStorageData() async {
     _controllerDisplayName.text = await _secureStorage.getDisplayName() ?? '';
     _controllerEmail.text = await _secureStorage.getEmail() ?? '';
     _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
   }
 
-// --------- Form validation ---------
+// --------- Form flutter's validators ---------
 
   final AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction;
-  String? _password = '';
-  String? _passwordConfirm = '';
 
   final _displayNameValidator = MultiValidator([
     RequiredValidator(errorText: 'Enter new display name'),
@@ -128,42 +103,58 @@ class _HomePageState extends State<HomePage> {
   ]);
   final _passwordValidator = MultiValidator([
     RequiredValidator(errorText: 'Required'),
-    MinLengthValidator(3, errorText: 'Min. 2 letters'),
+    MinLengthValidator(3, errorText: 'Min. 3 letters'),
     // MaxLengthValidator(20, errorText: "Password cannot be loger than 20 characters"),
     // PatternValidator(r'(?=.*?[#?!@$%^&*-])', errorText: 'Password must contain at least one special character')
   ]);
   final _passwordConfirmValidator = MultiValidator([
     RequiredValidator(errorText: 'Required'),
+    MinLengthValidator(3, errorText: 'Min. 3 letters'),
   ]);
 
-// --------- Form fields widgets ---------
+// --------- Form fields states ---------
 
+  // ---- Enabled field is underlined, icon toggle_on ----
   bool isDisplayNameEditingEnabled = false;
   bool isEmailEditingEnabled = false;
   bool isPasswordEditingEnabled = false;
   bool isPasswordConfirmEditingEnabled = false;
-  bool isEditingEnabled = false;
+  bool isFormEditingEnabled = false;
 
+  // ---- Focused field has grey background ----
   bool isDisplayNameFocused = false;
   bool isEmailFocused = false;
   bool isPasswordFocused = false;
   bool isPasswordConfirmFocused = false;
 
+  // ---- Changed field state changes icon to save ----
   bool isDisplayNameChanged = false;
   bool isEmailChanged = false;
   bool isPasswordChanged = false;
   bool isPasswordConfirmChanged = false;
+  bool isFormChanged = false;
 
+  // ---- Saved state changes icon to toggle_off, locks the field ----
   bool isDisplayNameSaved = true;
   bool isEmailSaved = true;
   bool isPasswordSaved = true;
   bool isFormSaved = false;
 
+  // ---- Password field and icon visibility ----
   bool isObscure = true;
 
-  String? newDisplayName = '';
-  String? newEmail = '';
-  String? newPassword = '';
+  // ---- New field value after saving input ----
+  String _newDisplayName = '';
+  String _newEmail = '';
+  String _newPassword = '';
+
+  // ---- Field current value from onChange ----
+  String _displayNameCurrent = '';
+  String _emailCurrent = '';
+  String _passwordCurrent = '';
+  String _passwordConfirmCurrent = '';
+
+// --------- Form fields widgets ---------
 
   Widget _entryFieldDisplayName(
     String displayName,
@@ -188,7 +179,9 @@ class _HomePageState extends State<HomePage> {
                 setState(
                   () {
                     isDisplayNameChanged = true;
-                    newDisplayName = value;
+                    isDisplayNameSaved = false;
+                    isFormChanged = true;
+                    _displayNameCurrent = value;
                   },
                 )
               }),
@@ -226,14 +219,22 @@ class _HomePageState extends State<HomePage> {
                     : !isDisplayNameChanged
                         ? Icons.toggle_on_rounded
                         : !isDisplayNameSaved
-                            ? Icons.toggle_off_outlined
-                            : Icons.save_outlined,
+                            ? Icons.save_outlined
+                            : Icons.toggle_off_outlined,
               ),
               onPressed: () {
-                updateUserName();
-                setState(() {
-                  isDisplayNameEditingEnabled = false;
-                });
+                if (_formKey.currentState!.validate()) {
+                  saveDisplayName();
+                  _newDisplayName = _displayNameCurrent;
+                  _controllerDisplayName.text = _newDisplayName;
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                        content: Text("Check form fields before saving!")),
+                  );
+                }
               },
             ),
           ),
@@ -263,7 +264,9 @@ class _HomePageState extends State<HomePage> {
                 setState(
                   () {
                     isEmailChanged = true;
-                    newEmail = value;
+                    isEmailSaved = false;
+                    isFormChanged = true;
+                    _emailCurrent = value;
                   },
                 )
               }),
@@ -301,15 +304,22 @@ class _HomePageState extends State<HomePage> {
                     : !isEmailChanged
                         ? Icons.toggle_on_rounded
                         : !isEmailSaved
-                            ? Icons.toggle_off_outlined
-                            : Icons.save_outlined,
+                            ? Icons.save_outlined
+                            : Icons.toggle_off_outlined,
               ),
               onPressed: () {
-                updateEmail();
-                setState(() {
-                  isEmailSaved = true;
-                  isEmailEditingEnabled = false;
-                });
+                if (_formKey.currentState!.validate()) {
+                  saveEmail();
+                  _newEmail = _emailCurrent;
+                  _controllerEmail.text = _newEmail;
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                        content: Text("Check form fields before saving!")),
+                  );
+                }
               },
             ),
           ),
@@ -323,10 +333,16 @@ class _HomePageState extends State<HomePage> {
     return Focus(
         onFocusChange: (hasFocus) {
           if (hasFocus) {
+            if (isPasswordSaved) {
+              _controllerPassword.text = _newPassword;
+            } else {
+              _controllerPassword.text = '';
+            }
             setState(() {
               isPasswordFocused = true;
             });
           } else {
+            if (isPasswordSaved) _controllerPassword.text = _newPassword;
             setState(() {
               isPasswordFocused = false;
             });
@@ -341,15 +357,16 @@ class _HomePageState extends State<HomePage> {
                   () {
                     isPasswordChanged = true;
                     isPasswordConfirmEditingEnabled = true;
+                    isFormChanged = true;
                     isPasswordSaved = false;
-                    newPassword = value;
+                    _passwordCurrent = value;
                   },
                 )
               }),
           controller: _controllerPassword,
           cursorColor: GlobalStyleVariables.secondaryColour,
           decoration: InputDecoration(
-            hintText: 'Change your password',
+            hintText: 'Enter new password',
             hintStyle: const TextStyle(
               color: Colors.black26,
               fontSize: 12,
@@ -398,10 +415,13 @@ class _HomePageState extends State<HomePage> {
     return Focus(
         onFocusChange: (hasFocus) {
           if (hasFocus) {
+            _controllerPasswordConfirm.text = '';
             setState(() {
               isPasswordConfirmFocused = true;
+              isObscure = true;
             });
           } else {
+            _controllerPasswordConfirm.text = '';
             setState(() {
               isPasswordConfirmFocused = false;
             });
@@ -415,7 +435,8 @@ class _HomePageState extends State<HomePage> {
                 setState(
                   () {
                     isPasswordConfirmChanged = true;
-                    _passwordConfirm = value;
+                    isPasswordSaved = false;
+                    _passwordConfirmCurrent = value;
                   },
                 )
               }),
@@ -455,10 +476,28 @@ class _HomePageState extends State<HomePage> {
                       ? Icons.save_outlined
                       : Icons.toggle_off_outlined),
               onPressed: () {
-                updatePassword();
-                setState(() {
-                  isPasswordConfirmEditingEnabled = false;
-                });
+                if (_formKey.currentState!.validate()) {
+                  if (_passwordConfirmCurrent == _passwordCurrent) {
+                    savePassword();
+                    _newPassword = _passwordCurrent;
+                    _controllerPassword.text = _newPassword;
+                    _controllerPasswordConfirm.text = '';
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                          content: Text("Passwords are not equal!")),
+                    );
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                        content: Text("Check form fields before saving!")),
+                  );
+                }
               },
             ),
           ),
@@ -468,24 +507,6 @@ class _HomePageState extends State<HomePage> {
 // <=============
 
 // ============= Buttons =============>
-
-  int _selectedIndex = 0;
-
-  Widget _deleteUserButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text('DANGER ZONE:'),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[600], foregroundColor: Colors.white),
-          onPressed: (() => deleteUser()),
-          child: const Text("Delete Account"),
-        ),
-      ],
-    );
-  }
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
@@ -501,6 +522,7 @@ class _HomePageState extends State<HomePage> {
       onPressed: () async {
         Navigator.of(context).pop();
         await Auth().deleteUser();
+        signOut();
       },
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.red[600])),
@@ -531,118 +553,258 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ---- Initial state after enabling editing from profile menu ----
   void enableEditing() {
     setState(() {
+      isDisplayNameFocused = false;
+      isEmailFocused = false;
+      isPasswordFocused = false;
+      isPasswordConfirmFocused = false;
+
+      isDisplayNameChanged = false;
+      isEmailChanged = false;
+      isPasswordChanged = false;
+      isPasswordConfirmChanged = false;
+      isFormChanged = false;
+
+      isDisplayNameSaved = true;
+      isEmailSaved = true;
+      isPasswordSaved = true;
+      isFormSaved = false;
+
+      isObscure = true;
       isDisplayNameEditingEnabled = true;
       isEmailEditingEnabled = true;
       isPasswordEditingEnabled = true;
-      isEditingEnabled = true;
-      isFormSaved = false;
+      isFormEditingEnabled = true;
     });
   }
 
-  void disableEditing() {
+  // ---- Resetting states after canceling/closing edit mode ----
+  void cancelEditing() {
     setState(() {
       isDisplayNameEditingEnabled = false;
       isEmailEditingEnabled = false;
       isPasswordEditingEnabled = false;
       isPasswordConfirmEditingEnabled = false;
-      isEditingEnabled = false;
+      isDisplayNameSaved = true;
+      isEmailSaved = true;
+      isPasswordSaved = true;
+      isFormEditingEnabled = false;
       isObscure = true;
     });
+  }
+
+  // ---- Update Mongo DB username ----
+  void saveDisplayName() {
+    updateUserName();
+    setState(() {
+      isDisplayNameSaved = true;
+      isDisplayNameEditingEnabled = false;
+      isDisplayNameFocused = false;
+      if (!isDisplayNameEditingEnabled &&
+          !isEmailEditingEnabled &&
+          !isPasswordEditingEnabled &&
+          !isPasswordConfirmEditingEnabled) isFormEditingEnabled = false;
+    });
+  }
+
+  // ---- Update Mongo DB email ----
+  void saveEmail() {
+    updateEmail();
+    setState(() {
+      isEmailSaved = true;
+      isEmailEditingEnabled = false;
+      isEmailFocused = false;
+      if (!isDisplayNameEditingEnabled &&
+          !isEmailEditingEnabled &&
+          !isPasswordEditingEnabled &&
+          !isPasswordConfirmEditingEnabled) isFormEditingEnabled = false;
+    });
+  }
+
+  // ---- Update Mongo DB password ----
+  void savePassword() {
+    updatePassword();
+    setState(() {
+      isPasswordSaved = true;
+      isPasswordEditingEnabled = false;
+      isPasswordConfirmEditingEnabled = false;
+      isPasswordFocused = false;
+      isPasswordConfirmFocused = false;
+      isObscure = true;
+      if (!isDisplayNameEditingEnabled &&
+          !isEmailEditingEnabled &&
+          !isPasswordEditingEnabled &&
+          !isPasswordConfirmEditingEnabled) isFormEditingEnabled = false;
+    });
+  }
+
+  // ---- Update Mongo DB fields ----
+  void saveChanges() {
+    if (isDisplayNameChanged == true) saveDisplayName();
+    if (isEmailChanged == true) saveEmail();
+    if (isPasswordChanged == true) savePassword();
+    setState(() => {
+          isFormSaved = true,
+          isFormEditingEnabled = false,
+          isDisplayNameFocused = false,
+          isEmailFocused = false,
+          isPasswordFocused = false,
+          isPasswordConfirmFocused = false,
+        });
+    cancelEditing();
   }
 
   // <=============
 
   // ============= Pages =============>
 
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       const MainPedometer(), //Page 0
       const QuestList(),
-      Container(
-        // Page 2
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(30),
-        child: SingleChildScrollView(
+      // Page 2
+      SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                width: double.infinity,
-                height: 4,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    'Welcome to Walkerrr',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                      fontSize: 24,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // --- Header ---
+                Column(
+                  children: [
+                    const Text(
+                      'Welcome to Walkerrr',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                        fontSize: 24,
+                      ),
                     ),
-                  ),
-                  const Text('Email from firebase:'),
-                  _userUid(),
-                ],
-              ),
-              const SizedBox(
-                width: double.infinity,
-                height: 20,
-              ),
-              Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Container(
-                            height: 80,
-                            width: double.infinity,
-                            child: _entryFieldDisplayName(
-                                "New display name", _controllerDisplayName)),
-                        Container(
-                          height: 80,
-                          width: double.infinity,
-                          child:
-                              _entryFieldEmail("Your email", _controllerEmail),
-                        ),
-                        Container(
-                          height: 80,
-                          width: double.infinity,
-                          child: _entryFieldPassword(
-                              "Enter password", _controllerPassword),
-                        ),
-                        Container(
-                          height: 80,
-                          width: double.infinity,
-                          child: isPasswordConfirmEditingEnabled
-                              ? _entryFieldPasswordConfirm("Re-type password",
-                                  _controllerPasswordConfirm)
-                              : Container(),
-                        ),
-                        Container(
-                          height: 40,
-                          width: double.infinity,
-                          child: isEditingEnabled
-                              ? _deleteUserButton()
-                              : Container(),
-                        ),
-                      ],
+                    const Text('Email from firebase:'),
+                    _userUid(),
+                    const SizedBox(
+                      width: double.infinity,
+                      height: 20,
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
+                // --- Form fields ---
+                Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // --- displayName form entry ---
+                      Container(
+                        height: 80,
+                        width: double.infinity,
+                        child: _entryFieldDisplayName(
+                            "New display name", _controllerDisplayName),
+                      ),
+                      // --- email form entry ---
+                      Container(
+                        height: 80,
+                        width: double.infinity,
+                        child: _entryFieldEmail("Your email", _controllerEmail),
+                      ),
+                      // --- password form entry ---
+                      Container(
+                        height: 80,
+                        width: double.infinity,
+                        child: _entryFieldPassword(
+                            "Enter password", _controllerPassword),
+                      ),
+                      // --- passwordConfirm form entry ---
+                      Visibility(
+                        visible: isPasswordConfirmEditingEnabled,
+                        child: Container(
+                            height: 80,
+                            width: double.infinity,
+                            child: _entryFieldPasswordConfirm(
+                                "Re-type password",
+                                _controllerPasswordConfirm)),
+                      ),
+                    ],
+                  ),
+                ),
+                // --- saveAll button ---
+                Visibility(
+                  visible: isFormChanged && isFormEditingEnabled,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      OutlinedButton.icon(
+                        icon: const Icon(
+                          Icons.save_outlined,
+                          size: 24.0,
+                        ),
+                        label: const Text('Save Changes'),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            if (_passwordConfirmCurrent == _passwordCurrent) {
+                              saveChanges();
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.red,
+                                    content: Text("Passwords are not equal!")),
+                              );
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.red,
+                                  content:
+                                      Text("Check form fields before saving!")),
+                            );
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: double.infinity,
+                  height: 140,
+                ),
+                // --- delete Account button ---
+                Visibility(
+                  visible: isFormEditingEnabled,
+                  child: Container(
+                    color: Colors.red[100],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('DANGER ZONE:',
+                            style: TextStyle(
+                                color: Colors.red[600],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20)),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red[600],
+                              foregroundColor: Colors.white),
+                          onPressed: (() => deleteUser()),
+                          child: const Text("Delete Account"),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
         ),
       ),
     ];
@@ -656,17 +818,15 @@ class _HomePageState extends State<HomePage> {
             PopupMenuButton<int>(
               enabled: true,
               elevation: 4,
-              offset: Offset(0, 58),
+              offset: const Offset(0, 58),
               shape: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white24, width: 1)),
               onCanceled: () {
-                //check if all changes saved
-                disableEditing();
+                cancelEditing();
               },
               onSelected: (value) {
                 if (value == 1) {
-                  enableEditing();
-                  ;
+                  !isFormEditingEnabled ? enableEditing() : cancelEditing();
                 } else if (value == 2) {
                   signOut();
                 }
@@ -678,14 +838,21 @@ class _HomePageState extends State<HomePage> {
                   value: 1,
                   child: Row(
                     children: [
-                      const Icon(Icons.edit_note),
+                      !isFormEditingEnabled
+                          ? const Icon(Icons.edit_outlined)
+                          : const Icon(Icons.edit_off_outlined),
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text("Edit profile",
-                          style: TextStyle(
-                            color: Colors.white,
-                          )),
+                      !isFormEditingEnabled
+                          ? const Text("Edit profile",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ))
+                          : const Text("Cancel",
+                              style: TextStyle(
+                                color: Colors.white,
+                              )),
                     ],
                   ),
                 ),
