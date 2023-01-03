@@ -17,6 +17,8 @@ class ArmorIcons {
 
   getIcon(String name) {
     switch (name) {
+      case "basic":
+        return armorIconZero;
       case "ninja":
         return armorIconOne;
       case "rogue":
@@ -43,6 +45,23 @@ class IdleArmorIcons {
   var idleArmorIconFour = Image.asset("assets/armors/idle-armor/4.png");
 
   var idleArmorIconFive = Image.asset("assets/armors/idle-armor/5.png");
+
+  getIdleSprite(String name) {
+    switch (name) {
+      case "basic":
+        return idleArmorIconZero;
+      case "ninja":
+        return idleArmorIconOne;
+      case "rogue":
+        return idleArmorIconTwo;
+      case "knight":
+        return idleArmorIconThree;
+      case "shaman":
+        return idleArmorIconFour;
+      case "beach":
+        return idleArmorIconFive;
+    }
+  }
 }
 
 class WalkingArmorIcons {
@@ -57,4 +76,21 @@ class WalkingArmorIcons {
   var walkingArmorIconFour = Image.asset("assets/armors/walking-armor/4.gif");
 
   var walkingArmorIconFive = Image.asset("assets/armors/walking-armor/5.gif");
+
+  getWalkingSprite(String name) {
+    switch (name) {
+      case "basic":
+        return walkingArmorIconZero;
+      case "ninja":
+        return walkingArmorIconOne;
+      case "rogue":
+        return walkingArmorIconTwo;
+      case "knight":
+        return walkingArmorIconThree;
+      case "shaman":
+        return walkingArmorIconFour;
+      case "beach":
+        return walkingArmorIconFive;
+    }
+  }
 }
