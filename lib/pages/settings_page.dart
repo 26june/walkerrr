@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
 
 // ==================== User MongoDB data edit ====================>
 
+// ---- Firebase User Data check ----
+
   Widget _userUid() {
     return Text(user?.email ?? "User Email");
   }
@@ -34,21 +36,21 @@ class _HomePageState extends State<HomePage> {
     return Text(user?.providerData[0].email.toString() ?? "User Email");
   }
 
-  Widget _userEmailVerified() {
-    return Text(user?.emailVerified.toString() ?? "User Email Verified");
-  }
+  // Widget _userEmailVerified() {
+  //   return Text(user?.emailVerified.toString() ?? "User Email Verified");
+  // }
 
-  Widget _userPassword() {
-    return Text(user?.providerData[0].providerId.toString() ?? "User Password");
-  }
+  // Widget _userPassword() {
+  //   return Text(user?.providerData[0].providerId.toString() ?? "User Password");
+  // }
 
-  Widget _userPhone() {
-    return Text(user?.providerData[0].phoneNumber.toString() ?? "User Phone");
-  }
+  // Widget _userPhone() {
+  //   return Text(user?.providerData[0].phoneNumber.toString() ?? "User Phone");
+  // }
 
-  Widget _userPhoto() {
-    return Text(user?.providerData[0].photoURL.toString() ?? "User Avatar");
-  }
+  // Widget _userPhoto() {
+  //   return Text(user?.providerData[0].photoURL.toString() ?? "User Avatar");
+  // }
 
   Widget _userCreationTime() {
     return Text(user?.metadata.creationTime
@@ -576,7 +578,10 @@ class _HomePageState extends State<HomePage> {
     Widget continueButton = ElevatedButton(
       onPressed: () async {
         Navigator.of(context).pop();
-        await Auth().deleteUser();
+        // await Auth().deleteUser();
+        _secureStorage.deleteDisplayName();
+        _secureStorage.deleteEmail();
+        _secureStorage.deletePassword();
         signOut();
       },
       style: ButtonStyle(
@@ -765,26 +770,6 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text('Email verified:'),
-                        _userEmailVerified(),
-                        const Text('Password:'),
-                        _userPassword(),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text('User Phone:'),
-                        _userPhone(),
-                        const Text('User Photo:'),
-                        _userPhoto(),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
                         const Text('Creation date:'),
                         _userCreationTime(),
                         const Text('Last SignIn:'),
@@ -793,7 +778,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(
                       width: double.infinity,
-                      height: 20,
+                      height: 30,
                     ),
                   ],
                 ),
@@ -847,10 +832,16 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       OutlinedButton.icon(
                         icon: const Icon(
+                          color: Colors.green,
                           Icons.save_outlined,
                           size: 24.0,
                         ),
-                        label: const Text('Save Changes'),
+                        label: const Text(
+                          'Save Changes',
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             if (!isPasswordChanged ||
@@ -887,6 +878,7 @@ class _HomePageState extends State<HomePage> {
                   visible: isFormEditingEnabled,
                   child: Container(
                     color: Colors.red[100],
+                    padding: const EdgeInsets.all(6),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -895,13 +887,19 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                                 color: Colors.red[600],
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20)),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red[600],
-                              foregroundColor: Colors.white),
+                                fontSize: 18)),
+                        OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          icon: const Icon(
+                            Icons.delete_forever_outlined,
+                            color: Colors.white,
+                            size: 20.0,
+                          ),
+                          label: const Text('Delete Account',
+                              style: TextStyle(color: Colors.white)),
                           onPressed: (() => deleteUser()),
-                          child: const Text("Delete Account"),
                         )
                       ],
                     ),
