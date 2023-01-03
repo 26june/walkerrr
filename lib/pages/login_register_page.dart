@@ -14,9 +14,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = "";
-  bool _isLogin = true; // Login/Register button text change
-  bool _isVisible = true; // Show/Hide password
-  bool _dontStore = false; // Secure Storage will not be updated
+  bool isLogin = true; // Login/Register button text change
+  bool isObscure = true; // Show/Hide password
+  bool dontStore = false; // Secure Storage will not be updated
 
 // ======== Secure Storage =========>
 
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
 // ======== Login / Register auth =========>
 
   Future<void> signInWithEmailAndPassword() async {
-    if (!_dontStore) {
+    if (!dontStore) {
       await _secureStorage.setDisplayName(_controllerDisplayName.text);
       await _secureStorage.setEmail(_controllerEmail.text);
       await _secureStorage.setPassword(_controllerPassword.text);
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> createUserWithEmailAndPassword() async {
-    if (!_dontStore) {
+    if (!dontStore) {
       await _secureStorage.setDisplayName(_controllerDisplayName.text);
       await _secureStorage.setEmail(_controllerEmail.text);
       await _secureStorage.setPassword(_controllerPassword.text);
@@ -87,15 +87,14 @@ class _LoginPageState extends State<LoginPage> {
 // Page App bar login/register title
 
   Widget _title() {
-    return (_isLogin) ? const Text("Login") : const Text("Register");
+    return (isLogin) ? const Text("Login") : const Text("Register");
   }
 
 // ======== Form widgets =========>
 
-// Flutter validation package methods
+// ---- Flutter validation package methods ----
+
   final AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction;
-  String? _password = '';
-  String? _passwordConfirm = '';
 
   final _displayNameValidator = MultiValidator([
     RequiredValidator(errorText: 'Required'),
@@ -106,13 +105,13 @@ class _LoginPageState extends State<LoginPage> {
     MinLengthValidator(5, errorText: 'Min. 5 letters'),
     EmailValidator(errorText: "Invalid email address"),
   ]);
-  final _passwordValidator = MultiValidator([
+  final _currentPasswordValidator = MultiValidator([
     RequiredValidator(errorText: 'Required'),
     MinLengthValidator(3, errorText: 'Min. 2 letters'),
     // MaxLengthValidator(20, errorText: "Password cannot be loger than 20 characters"),
     // PatternValidator(r'(?=.*?[#?!@$%^&*-])', errorText: 'Password must contain at least one special character')
   ]);
-  final _passwordConfirmValidator = MultiValidator([
+  final _currentPasswordConfirmValidator = MultiValidator([
     RequiredValidator(errorText: 'Required'),
   ]);
 
@@ -192,52 +191,101 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  String _currentPassword = '';
+  String _currentPasswordConfirm = '';
+  bool isPasswordFocused = false;
+  bool isPasswordChanged = false;
+
   Widget _entryFieldPassword(
     String password,
     TextEditingController _controllerPassword,
   ) {
-    return TextFormField(
-      obscureText: _isVisible,
-      validator: _passwordValidator,
-      onChanged: ((value) => (value.isEmpty)
-          ? _password = value
-          : _password = _controllerPassword.text),
-      controller: _controllerPassword,
-      cursorColor: Colors.green,
-      decoration: InputDecoration(
-        hintText: 'Password',
-        hintStyle: const TextStyle(
-          color: Colors.black26,
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.italic,
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.green),
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
+    return Focus(
+      onFocusChange: (hasFocus) {
+        if (hasFocus) {
+          setState(() {
+            isPasswordFocused = true;
+            _currentPassword = _controllerPassword.text;
+            _controllerPassword.text = '';
+          });
+        } else {
+          setState(() {
+            isPasswordFocused = false;
+            _controllerPassword.text = _currentPassword;
+            isObscure = true;
+          });
+        }
+      },
+      child: TextFormField(
+        obscureText: isObscure,
+        validator: _currentPasswordValidator,
+        onChanged: ((value) => {
+              if (value.isNotEmpty)
+                {
+                  setState(
+                    () {
+                      isPasswordChanged = true;
+                      _currentPassword = value;
+                    },
+                  ),
+                }
+            }),
+        controller: _controllerPassword,
+        cursorColor: Colors.green,
+        decoration: InputDecoration(
+          hintText: 'Enter your password',
+          hintStyle: const TextStyle(
             color: Colors.black26,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.italic,
           ),
-        ),
-        prefixIcon: const Icon(Icons.password_outlined),
-        label: const Text(
-          'Password',
-          style: TextStyle(
-            color: Colors.black54,
-            letterSpacing: 0.5,
-            fontSize: 14,
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.green),
           ),
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isVisible ? Icons.visibility : Icons.visibility_off,
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black26,
+            ),
           ),
-          onPressed: () {
-            setState(() {
-              _isVisible = !_isVisible;
-            });
-          },
+          prefixIcon: const Icon(Icons.password_outlined),
+          label: const Text(
+            'Password',
+            style: TextStyle(
+              color: Colors.black54,
+              letterSpacing: 0.5,
+              fontSize: 14,
+            ),
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(!isObscure
+                ? Icons.visibility_off_outlined
+                : Icons.visibility_outlined),
+            onPressed: () {
+              !isPasswordChanged && isObscure
+                  ? setState(() {
+                      _currentPassword = _controllerPassword.text;
+                      _controllerPassword.text = '';
+                      isObscure = false;
+                    })
+                  : !isPasswordChanged && !isObscure
+                      ? setState(() {
+                          isObscure = true;
+                          _controllerPassword.text = _currentPassword;
+                        })
+                      : isPasswordChanged && isObscure
+                          ? setState(() {
+                              _controllerPassword.text = _currentPassword;
+                              isObscure = false;
+                            })
+                          : isPasswordChanged && !isObscure
+                              ? setState(() {
+                                  _controllerPassword.text = _currentPassword;
+                                  isObscure = true;
+                                })
+                              : isObscure = true;
+            },
+          ),
         ),
       ),
     );
@@ -248,9 +296,9 @@ class _LoginPageState extends State<LoginPage> {
     TextEditingController _controllerPasswordConfirm,
   ) {
     return TextFormField(
-      obscureText: _isVisible,
-      validator: _passwordConfirmValidator,
-      onChanged: ((value) => _passwordConfirm = value),
+      obscureText: isObscure,
+      validator: _currentPasswordConfirmValidator,
+      onChanged: ((value) => _currentPasswordConfirm = value),
       controller: _controllerPasswordConfirm,
       cursorColor: Colors.green,
       decoration: const InputDecoration(
@@ -290,15 +338,18 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _submitButton() {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green, foregroundColor: Colors.white),
+        style: isLogin
+            ? ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, foregroundColor: Colors.white)
+            : ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue, foregroundColor: Colors.white),
         onPressed: () {
-          if (_isLogin) {
+          if (isLogin) {
             _submitValidation();
           } else {
             if (_formKey.currentState!.validate()) {
-              if (_passwordConfirm == _password ||
-                  _passwordConfirm == _controllerPassword.text) {
+              if (_currentPasswordConfirm == _currentPassword ||
+                  _currentPasswordConfirm == _controllerPassword.text) {
                 _submitValidation();
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -320,11 +371,11 @@ class _LoginPageState extends State<LoginPage> {
             }
           }
         },
-        child: Text(_isLogin ? "Login" : "Register"));
+        child: Text(isLogin ? "Login" : "Register"));
   }
 
   void _submitValidation() {
-    _isLogin ? signInWithEmailAndPassword() : createUserWithEmailAndPassword();
+    isLogin ? signInWithEmailAndPassword() : createUserWithEmailAndPassword();
     _formKey.currentState?.save();
   }
 
@@ -332,34 +383,44 @@ class _LoginPageState extends State<LoginPage> {
     return TextButton(
         onPressed: () {
           setState(() {
-            _isLogin = !_isLogin;
+            isLogin = !isLogin;
           });
         },
-        child: Text(_isLogin ? "Register Instead" : "Login Instead",
-            style: const TextStyle(
-              color: Colors.blue,
-              letterSpacing: 0.5,
-              fontSize: 14,
-            )));
+        child: isLogin
+            ? const Text("Register Instead",
+                style: TextStyle(
+                  color: Colors.blue,
+                  letterSpacing: 0.5,
+                  fontSize: 14,
+                ))
+            : const Text("Login Instead",
+                style: TextStyle(
+                  color: Colors.green,
+                  letterSpacing: 0.5,
+                  fontSize: 14,
+                )));
   }
 
-  Widget _dontStoreMyData() {
+  Widget dontStoreMyData() {
     return CheckboxListTile(
       title: const Text(
-        "Don't Save Data",
+        "Forget Me",
         style: TextStyle(color: Colors.black54, fontSize: 12),
       ),
-      value: _dontStore,
+      value: dontStore,
       onChanged: (bool? value) {
+        _secureStorage.deleteDisplayName();
+        _secureStorage.deleteEmail();
+        _secureStorage.deletePassword();
         setState(() {
-          _dontStore = value!;
+          dontStore = value!;
         });
       },
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
 
-  Widget _clearMyData() {
+  Widget _clearForm() {
     return TextButton(
         onPressed: () {
           setState(() {
@@ -405,7 +466,7 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         height: 80,
                         width: double.infinity,
-                        child: (!_isLogin)
+                        child: (!isLogin)
                             ? _entryFieldDisplayName(
                                 "Your name", _controllerDisplayName)
                             : const SizedBox(
@@ -423,7 +484,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: _entryFieldPassword(
                             "Enter password", _controllerPassword),
                       ),
-                      if (!_isLogin)
+                      if (!isLogin)
                         Container(
                           height: 80,
                           width: double.infinity,
@@ -457,10 +518,10 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                        child: _dontStoreMyData(),
+                        child: dontStoreMyData(),
                       ),
                       Expanded(
-                        child: _clearMyData(),
+                        child: _clearForm(),
                       ),
                     ],
                   ),

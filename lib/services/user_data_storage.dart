@@ -35,6 +35,10 @@ class SecureStorage {
     return await _secureStorage.read(key: _keyEmail);
   }
 
+  Future deleteEmail() async {
+    return await _secureStorage.delete(key: _keyEmail);
+  }
+
   Future setPassword(String password) async {
     await _secureStorage.write(key: _keyPassword, value: password);
   }
