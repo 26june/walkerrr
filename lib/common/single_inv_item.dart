@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/armor_variables.dart';
 import 'package:walkerrr/common/styling_variables.dart';
+import 'package:walkerrr/pages/steps_main_page.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 
@@ -15,8 +17,8 @@ class SingleInventoryItem extends StatefulWidget {
 }
 
 class _SingleInventoryItemState extends State<SingleInventoryItem> {
-  bool isButtonActive = true;
   final currentlyEquipped = userObject['equippedArmour'];
+  bool isButtonActive = true;
   String buttonText = "Equip";
 
   @override
@@ -47,12 +49,13 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
                       setState(() {
                         patchArmour(userObject['uid'], widget.name);
                         userObject['equippedArmour'] = widget.name;
-                        isButtonActive = false;
                         buttonText = "Equipped";
+                        isButtonActive = false;
                       });
+                      CurrentEquip.current.value = widget.name.toLowerCase();
                     }
                   : null,
-              child: const Text("Equip"))
+              child: Text(buttonText))
         ],
       ),
     );
