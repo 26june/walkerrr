@@ -63,6 +63,11 @@ class MainPedometerState extends State<MainPedometer>
     });
   }
 
+  getCurrentlyEquipped() {
+    print("getting");
+    return userObject['equippedArmour'].toLowerCase();
+  }
+
   void initPlatformState() {
     _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
     _pedestrianStatusStream
@@ -81,7 +86,7 @@ class MainPedometerState extends State<MainPedometer>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    final currentlyEquipped = getCurrentlyEquipped();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WillPopScope(
@@ -163,8 +168,9 @@ class MainPedometerState extends State<MainPedometer>
                 // ),
 
                 status == "walking"
-                    ? WalkingArmorIcons().getWalkingSprite("knight")
-                    : IdleArmorIcons().getIdleSprite("knight")
+                    ? WalkingArmorIcons()
+                        .getWalkingSprite(getCurrentlyEquipped())
+                    : IdleArmorIcons().getIdleSprite(getCurrentlyEquipped())
               ],
             ),
           ),

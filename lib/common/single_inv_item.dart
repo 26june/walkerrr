@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:walkerrr/common/styling_variables.dart';
+import 'package:walkerrr/pages/steps_main_page.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 
