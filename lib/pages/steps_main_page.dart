@@ -21,8 +21,7 @@ class MainPedometer extends StatefulWidget {
   State<MainPedometer> createState() => MainPedometerState();
 }
 
-class MainPedometerState extends State<MainPedometer>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class MainPedometerState extends State<MainPedometer> {
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String status = '?', steps = '?';
@@ -85,8 +84,7 @@ class MainPedometerState extends State<MainPedometer>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    final currentlyEquipped = getCurrentlyEquipped();
+    // final currentlyEquipped = getCurrentlyEquipped();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WillPopScope(
@@ -181,7 +179,4 @@ class MainPedometerState extends State<MainPedometer>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

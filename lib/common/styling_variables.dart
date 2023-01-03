@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 class GlobalStyleVariables {
   static const secondaryColour = Color(0xffff6347);
+  static const backgroundColour = Color.fromARGB(255, 255, 114, 89);
 
   //Inventory Page
   static const invAppBarColour = Color(0xffb06946);
@@ -14,7 +15,6 @@ class GlobalStyleVariables {
 
   static const iconBorderColour = Color(0xff40211e);
   static const iconFillColour = Color(0xffce4643);
-
 }
 
 class CustomIcons {
