@@ -35,17 +35,23 @@ class ArmorIcons {
 }
 
 class IdleArmorIcons {
-  var idleArmorIconZero = Image.asset("assets/armors/idle-armor/0.png");
+  var idleArmorIconZero =
+      Image.asset("assets/armors/idle-armor/0.png", scale: 0.5);
 
-  var idleArmorIconOne = Image.asset("assets/armors/idle-armor/1.png");
+  var idleArmorIconOne =
+      Image.asset("assets/armors/idle-armor/1.png", scale: 0.5);
 
-  var idleArmorIconTwo = Image.asset("assets/armors/idle-armor/2.png");
+  var idleArmorIconTwo =
+      Image.asset("assets/armors/idle-armor/2.png", scale: 0.5);
 
-  var idleArmorIconThree = Image.asset("assets/armors/idle-armor/3.png");
+  var idleArmorIconThree =
+      Image.asset("assets/armors/idle-armor/3.png", scale: 0.5);
 
-  var idleArmorIconFour = Image.asset("assets/armors/idle-armor/4.png");
+  var idleArmorIconFour =
+      Image.asset("assets/armors/idle-armor/4.png", scale: 0.5);
 
-  var idleArmorIconFive = Image.asset("assets/armors/idle-armor/5.png");
+  var idleArmorIconFive =
+      Image.asset("assets/armors/idle-armor/5.png", scale: 0.5);
 
   getIdleSprite(String name) {
     switch (name) {
@@ -66,17 +72,23 @@ class IdleArmorIcons {
 }
 
 class WalkingArmorIcons {
-  var walkingArmorIconZero = Image.asset("assets/armors/walking-armor/0.gif");
+  var walkingArmorIconZero =
+      Image.asset("assets/armors/walking-armor/0.gif", scale: 0.5);
 
-  var walkingArmorIconOne = Image.asset("assets/armors/walking-armor/1.gif");
+  var walkingArmorIconOne =
+      Image.asset("assets/armors/walking-armor/1.gif", scale: 0.5);
 
-  var walkingArmorIconTwo = Image.asset("assets/armors/walking-armor/2.gif");
+  var walkingArmorIconTwo =
+      Image.asset("assets/armors/walking-armor/2.gif", scale: 0.5);
 
-  var walkingArmorIconThree = Image.asset("assets/armors/walking-armor/3.gif");
+  var walkingArmorIconThree =
+      Image.asset("assets/armors/walking-armor/3.gif", scale: 0.5);
 
-  var walkingArmorIconFour = Image.asset("assets/armors/walking-armor/4.gif");
+  var walkingArmorIconFour =
+      Image.asset("assets/armors/walking-armor/4.gif", scale: 0.5);
 
-  var walkingArmorIconFive = Image.asset("assets/armors/walking-armor/5.gif");
+  var walkingArmorIconFive =
+      Image.asset("assets/armors/walking-armor/5.gif", scale: 0.5);
 
   getWalkingSprite(name) {
     switch (name) {

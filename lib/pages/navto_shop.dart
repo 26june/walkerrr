@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:walkerrr/common/armor_variables.dart';
 import 'package:walkerrr/common/single_shopitem.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 
 class WalkerShop extends StatefulWidget {
@@ -21,6 +22,7 @@ class _WalkerShopState extends State<WalkerShop> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: GlobalStyleVariables.invAppBarColour,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -29,6 +31,7 @@ class _WalkerShopState extends State<WalkerShop> {
           ],
         ),
       ),
+      backgroundColor: GlobalStyleVariables.invBackgroundColour,
       body: GridView.count(
         crossAxisCount: 2,
         children: [
