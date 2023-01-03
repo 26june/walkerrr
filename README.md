@@ -30,7 +30,7 @@ git clone https://github.com/26june/walkerrr.git
 ```
 cd walkerrr
 ```
-## 3. run app:
+### 3. run app:
 connect your device or use an emulator and type in the command 'flutter run' in the terminal and wait for the app to install
 ```
 flutter run
