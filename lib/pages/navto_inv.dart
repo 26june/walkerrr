@@ -12,6 +12,13 @@ class WalkerInventory extends StatefulWidget {
 }
 
 class _WalkerInventoryState extends State<WalkerInventory> {
+  final currentTrophies = userObject['trophies'];
+  final ninja = ArmorIcons().armorIconOne;
+  final rogue = ArmorIcons().armorIconTwo;
+  final knight = ArmorIcons().armorIconThree;
+  final shaman = ArmorIcons().armorIconFour;
+  final beach = ArmorIcons().armorIconFive;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,15 +28,10 @@ class _WalkerInventoryState extends State<WalkerInventory> {
       backgroundColor: GlobalStyleVariables.invBackgroundColour,
       body: GridView.count(
         crossAxisCount: 2,
-        children: [
-          SingleInventoryItem(
-            asset: ArmorIcons().getIcon("ninja"),
-          ),
-          SingleInventoryItem(
-            asset: ArmorIcons().getIcon("knight"),
-          ),
-
-        ],
+        children: List.generate(
+            currentTrophies.length,
+            (index) =>
+                SingleInventoryItem(asset: ArmorIcons().getIcon(currentTrophies[index]['name']))),
       ),
     );
   }

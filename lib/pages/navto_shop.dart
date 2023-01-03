@@ -11,6 +11,12 @@ class WalkerShop extends StatefulWidget {
 }
 
 class _WalkerShopState extends State<WalkerShop> {
+  final ninja = ArmorIcons().armorIconOne;
+  final rogue = ArmorIcons().armorIconTwo;
+  final knight = ArmorIcons().armorIconThree;
+  final shaman = ArmorIcons().armorIconFour;
+  final beach = ArmorIcons().armorIconFive;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +32,11 @@ class _WalkerShopState extends State<WalkerShop> {
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconOne),
-          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconTwo),
-          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconThree),
-          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconFour),
-          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconFive),
+          SingleShopItem(name: "Ninja", price: 500, assetName: ninja),
+          SingleShopItem(name: "Rogue", price: 500, assetName: rogue),
+          SingleShopItem(name: "Knight", price: 500, assetName: knight),
+          SingleShopItem(name: "Shaman", price: 500, assetName: shaman),
+          SingleShopItem(name: "Beach", price: 500, assetName: beach),
         ],
       ),
     );

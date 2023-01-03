@@ -96,12 +96,8 @@ class MainPedometerState extends State<MainPedometer>
           floatingActionButton: SpeedDial(
             icon: CustomIcons.icon_add,
             activeIcon: CustomIcons.icon_x,
-
             foregroundColor: GlobalStyleVariables.iconBorderColour,
             backgroundColor: Colors.white,
-            
-      
-
             spacing: 3,
             openCloseDial: isDialOpen,
             renderOverlay: false,
@@ -110,7 +106,10 @@ class MainPedometerState extends State<MainPedometer>
             children: [
               SpeedDialChild(
                 child: Image.asset(
-              "assets/images/icon_BackPack.png", height: 24, fit: BoxFit.cover,),
+                  "assets/images/icon_BackPack.png",
+                  height: 24,
+                  fit: BoxFit.cover,
+                ),
                 label: "Inventory",
                 onTap: () {
                   Navigator.push(
@@ -121,7 +120,10 @@ class MainPedometerState extends State<MainPedometer>
               ),
               SpeedDialChild(
                 child: Image.asset(
-              "assets/images/icon_Cart.png", height: 24, fit: BoxFit.cover,),
+                  "assets/images/icon_Cart.png",
+                  height: 24,
+                  fit: BoxFit.cover,
+                ),
                 label: "Shop",
                 onTap: () {
                   Navigator.push(
@@ -131,8 +133,6 @@ class MainPedometerState extends State<MainPedometer>
                 },
               ),
             ],
-
-            
           ),
           body: Center(
             child: Column(
@@ -144,7 +144,7 @@ class MainPedometerState extends State<MainPedometer>
                 ),
                 Text(
                   steps,
-                  style: const TextStyle(fontSize: 60),
+                  style: const TextStyle(fontSize: 48),
                 ),
                 const Divider(
                   height: 100,
@@ -162,7 +162,9 @@ class MainPedometerState extends State<MainPedometer>
                 //   scale: 0.5,
                 // ),
 
-                status == "walking" ? WalkingArmorIcons().walkingArmorIconOne : IdleArmorIcons().idleArmorIconOne
+                status == "walking"
+                    ? WalkingArmorIcons().walkingArmorIconOne
+                    : IdleArmorIcons().idleArmorIconOne
               ],
             ),
           ),

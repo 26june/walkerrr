@@ -19,10 +19,9 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
       // color: GlobalStyleVariables.invItemBackGroundColour,
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        border: Border.all(color: GlobalStyleVariables.invItemBorderColour, width: 5),
-        color: GlobalStyleVariables.invItemBackGroundColour
-        
-      ),
+          border: Border.all(
+              color: GlobalStyleVariables.invItemBorderColour, width: 5),
+          color: GlobalStyleVariables.invItemBackGroundColour),
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
