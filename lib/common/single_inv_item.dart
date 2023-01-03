@@ -4,7 +4,7 @@ import 'package:walkerrr/common/styling_variables.dart';
 class SingleInventoryItem extends StatefulWidget {
   const SingleInventoryItem({super.key, required this.asset});
 
-  final String asset;
+  final Widget asset;
 
   @override
   State<SingleInventoryItem> createState() => _SingleInventoryItemState();
@@ -19,12 +19,11 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
       // color: GlobalStyleVariables.invItemBackGroundColour,
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        border: Border.all(color: GlobalStyleVariables.invItemBorderColour, width: 5),
-        color: GlobalStyleVariables.invItemBackGroundColour
-        
-      ),
+          border: Border.all(
+              color: GlobalStyleVariables.invItemBorderColour, width: 5),
+          color: GlobalStyleVariables.invItemBackGroundColour),
 
-      child: Image.asset(widget.asset),
+      child: widget.asset,
     );
   }
 }
