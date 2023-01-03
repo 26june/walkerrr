@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 
@@ -35,43 +36,43 @@ class _SingleShopItemState extends State<SingleShopItem> {
     return Container(
       height: double.infinity,
       width: double.infinity,
-      color: Colors.grey,
-      margin: const EdgeInsets.all(10),
-      child: Column(children: [
-        widget.assetName,
-        const SizedBox(
-          height: 10,
-        ),
-        Text(widget.name),
-        Text("Price: ${widget.price} Coins"),
-        const SizedBox(
-          height: 10,
-        ),
-        ElevatedButton(
-            onPressed: isButtonActive
-                ? () {
-                    setState(() {
-                      final currentCoins = userObject["coins"];
-                      if (currentCoins > widget.price) {
-                        final newShopItem = {
-                          "name": widget.name,
-                          "price": widget.price
-                        };
-                        patchTrophiesToDB(userObject['uid'], newShopItem);
-                        userObject["coins"] = currentCoins - widget.price;
-                        patchCoins(userObject['uid'], -widget.price);
-                        final currentTrophies = userObject["trophies"];
-                        userObject["trophies"] = [
-                          ...currentTrophies,
-                          newShopItem
-                        ];
-                        isButtonActive = false;
+      margin: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+          border: Border.all(
+              color: GlobalStyleVariables.invItemBorderColour, width: 5),
+          color: GlobalStyleVariables.invItemBackGroundColour),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            widget.assetName,
+            Text(widget.name),
+            Text("Price: ${widget.price} Coins"),
+            ElevatedButton(
+                onPressed: isButtonActive
+                    ? () {
+                        setState(() {
+                          final currentCoins = userObject["coins"];
+                          if (currentCoins > widget.price) {
+                            final newShopItem = {
+                              "name": widget.name,
+                              "price": widget.price
+                            };
+                            patchTrophiesToDB(userObject['uid'], newShopItem);
+                            userObject["coins"] = currentCoins - widget.price;
+                            patchCoins(userObject['uid'], -widget.price);
+                            final currentTrophies = userObject["trophies"];
+                            userObject["trophies"] = [
+                              ...currentTrophies,
+                              newShopItem
+                            ];
+                            isButtonActive = false;
+                          }
+                        });
                       }
-                    });
-                  }
-                : null,
-            child: Text(buttonText))
-      ]),
+                    : null,
+                child: Text(buttonText))
+          ]),
     );
   }
 }

@@ -137,26 +137,25 @@ class MainPedometerState extends State<MainPedometer> {
               ),
             ],
           ),
-          body: Center(
+          body: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/background.png"),
+                    fit: BoxFit.cover)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text(
                   'Steps taken:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
                 Text(
                   steps,
-                  style: const TextStyle(fontSize: 48),
+                  style: const TextStyle(fontSize: 48, color: Colors.white),
                 ),
-                const Divider(
-                  height: 100,
-                  thickness: 0,
-                  color: Colors.white,
-                ),
-                const Text(
-                  'Pedestrian status:',
-                  style: TextStyle(fontSize: 30),
+
+                const SizedBox(
+                  height: 50,
                 ),
                 // Image.asset(
                 //   status == "walking"
