@@ -1,16 +1,57 @@
-# walkerrr
+# walkerrr.
 
-A new Flutter project.
+## Summary
 
-## Getting Started
+An app that makes walking more exciting by adding an rpg element to it.
 
-This project is a starting point for a Flutter application.
+User steps complete different quests which earn coins, these can then be used to buy armor for your base character.
 
-A few resources to get you started if this is your first Flutter project:
+Quests will be started by the user and have a time limit in which to complete them, quests with more steps will earn better prizes.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Technology used:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Back-end:
+Express JS
+MongoDB
+Firebase
+
+Front-end:
+Flutter
+Dart
+
+
+## To host this project locally:
+
+### 1. Clone the repo:
+```
+git clone https://github.com/26june/walkerrr.git
+```
+### 2. Change folders:
+```
+cd walkerrr
+```
+## 3. run app:
+connect your device or use an emulator and type in the command 'flutter run' in the terminal and wait for the app to install
+```
+flutter run
+```
+instructions on how to setup your android phone or an emulator can be found here:
+https://docs.flutter.dev/get-started/install/linux
+
+## Back-end repo:
+
+https://github.com/DavidH3031/walking-backend
+
+## Future features:
+
+More armor and inventories available.
+
+Different quests that appear automatically.
+
+Different themes.
+
+## Notes:
+
+this project was built using:
+
+node.js v18.10.0
