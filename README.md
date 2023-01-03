@@ -2,6 +2,7 @@
 
 ## Summary
 
+
 An app that makes walking more exciting by adding an rpg element to it.
 
 User steps complete different quests which earn coins, these can then be used to buy armor for your base character.
@@ -10,14 +11,14 @@ Quests will be started by the user and have a time limit in which to complete th
 
 ## Technology used:
 
-Back-end:
-Express JS
-MongoDB
-Firebase
+#### Back-end:
+- Express JS
+- MongoDB
+- Firebase
 
-Front-end:
-Flutter
-Dart
+#### Front-end:
+- Flutter
+- Dart
 
 
 ## To host this project locally:
@@ -30,7 +31,7 @@ git clone https://github.com/26june/walkerrr.git
 ```
 cd walkerrr
 ```
-### 3. run app:
+### 3. Run app:
 connect your device or use an emulator and type in the command 'flutter run' in the terminal and wait for the app to install
 ```
 flutter run
@@ -44,11 +45,15 @@ https://github.com/DavidH3031/walking-backend
 
 ## Future features:
 
-More armor and inventories available.
+- More armor and inventories available.
 
-Different quests that appear automatically.
+- Different quests that appear automatically.
 
-Different themes.
+- Custom themes.
+
+## Trello Board:
+
+https://trello.com/b/0VtcXOYR/merge-conflict
 
 ## Notes:
 
