@@ -104,3 +104,13 @@ Future<void> patchTrophiesToDB(uid, newTrophy) async {
         'trophies': [...currentTrophies, newTrophy]
       }));
 }
+
+Future<void> patchArmour(uid, newArmour) async {
+  final url = Uri.http(david, '/api/users/$uid');
+  await http.patch(url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: jsonEncode({"equippedArmour": newArmour}));
+}
