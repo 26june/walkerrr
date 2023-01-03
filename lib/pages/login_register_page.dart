@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:walkerrr/auth.dart';
 import 'package:walkerrr/services/user_data_storage.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,10 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerPasswordConfirm =
       TextEditingController();
 
-  // final String _keyDisplayName = 'displayName';
-  // final String _keyEmail = 'email';
-  // final String _keyPassWord = 'password';
-
   final SecureStorage _secureStorage = SecureStorage();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -36,39 +33,18 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     fetchSecureStorageData();
-    // setSecureStorageData();
-    // deleteSecureStorageData();
   }
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
-    _controllerDisplayName.dispose();
-    _controllerEmail.dispose();
-    _controllerPassword.dispose();
-    _controllerPasswordConfirm.dispose();
     super.dispose();
   }
 
   Future<void> fetchSecureStorageData() async {
     _controllerDisplayName.text = await _secureStorage.getDisplayName() ?? '';
     _controllerEmail.text = await _secureStorage.getEmail() ?? '';
-    _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
+    _controllerPassword.text = await _secureStorage.getPassword() ?? '';
   }
-
-  // Future<void> setSecureStorageData() async {
-  //   await _secureStorage.write(key: _keyDisplayName);
-  //   await _secureStorage.write(key: _keyEmail);
-  //   await _secureStorage.write(key: _keyPassWord);
-  // }
-
-  // Future<void> deleteSecureStorageData() async {
-  //   await _secureStorage.delete(key: _keyDisplayName);
-  //   await _secureStorage.delete(key: _keyEmail);
-  //   await _secureStorage.delete(key: _keyPassWord);
-  // }
-
 // <========
 
 // ======== Login / Register auth =========>
@@ -77,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!_dontStore) {
       await _secureStorage.setDisplayName(_controllerDisplayName.text);
       await _secureStorage.setEmail(_controllerEmail.text);
-      await _secureStorage.setPassWord(_controllerPassword.text);
+      await _secureStorage.setPassword(_controllerPassword.text);
     }
     try {
       await Auth().signInWithEmailAndPassword(
@@ -93,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!_dontStore) {
       await _secureStorage.setDisplayName(_controllerDisplayName.text);
       await _secureStorage.setEmail(_controllerEmail.text);
-      await _secureStorage.setPassWord(_controllerPassword.text);
+      await _secureStorage.setPassword(_controllerPassword.text);
     }
     try {
       await Auth().createUserWithEmailAndPassword(
@@ -140,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
     RequiredValidator(errorText: 'Required'),
   ]);
 
-  // Form field widgets
+  // ---- Form field widgets ----
 
   Widget _entryFieldDisplayName(
     String displayName,
@@ -317,9 +293,10 @@ class _LoginPageState extends State<LoginPage> {
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green, foregroundColor: Colors.white),
         onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            if (_isLogin) _submitValidation();
-            {
+          if (_isLogin) {
+            _submitValidation();
+          } else {
+            if (_formKey.currentState!.validate()) {
               if (_passwordConfirm == _password ||
                   _passwordConfirm == _controllerPassword.text) {
                 _submitValidation();
@@ -327,20 +304,20 @@ class _LoginPageState extends State<LoginPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       duration: Duration(seconds: 2),
-                      backgroundColor: Colors.pink,
+                      backgroundColor: Colors.red,
                       content: Text("Re-type both passwords!")),
                 );
               }
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: Colors.red,
+                    content: Text(errorMessage == ""
+                        ? "Check form fields!"
+                        : "Error: $errorMessage!")),
+              );
             }
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  duration: const Duration(seconds: 2),
-                  backgroundColor: Colors.pink,
-                  content: Text(errorMessage == ""
-                      ? "Check form fields!"
-                      : "Error: $errorMessage!")),
-            );
           }
         },
         child: Text(_isLogin ? "Login" : "Register"));
@@ -409,6 +386,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         appBar: AppBar(
           title: _title(),
+          backgroundColor: GlobalStyleVariables.secondaryColour,
         ),
         body: Container(
           height: double.infinity,

@@ -7,7 +7,7 @@ import 'package:walkerrr/providers/user_provider.dart';
 
 final String _keyDisplayName = 'displayName';
 final String _keyEmail = 'email';
-final String _keyPassWord = 'password';
+final String _keyPassword = 'password';
 
 class SecureStorage {
   // Create _secureStorage
@@ -35,16 +35,16 @@ class SecureStorage {
     return await _secureStorage.read(key: _keyEmail);
   }
 
-  Future setPassWord(String password) async {
-    await _secureStorage.write(key: _keyPassWord, value: password);
+  Future setPassword(String password) async {
+    await _secureStorage.write(key: _keyPassword, value: password);
   }
 
-  Future<String?> getPassWord() async {
-    return await _secureStorage.read(key: _keyPassWord);
+  Future<String?> getPassword() async {
+    return await _secureStorage.read(key: _keyPassword);
   }
 
-  Future deletePassWord() async {
-    return await _secureStorage.delete(key: _keyPassWord);
+  Future deletePassword() async {
+    return await _secureStorage.delete(key: _keyPassword);
   }
 
 // <=========
