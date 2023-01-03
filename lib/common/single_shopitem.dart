@@ -8,7 +8,7 @@ class SingleShopItem extends StatefulWidget {
       required this.assetName});
 
   final String name;
-  final String assetName;
+  final Widget assetName;
   final int price;
 
   @override
@@ -24,7 +24,7 @@ class _SingleShopItemState extends State<SingleShopItem> {
       color: Colors.grey,
       margin: const EdgeInsets.all(10),
       child: Column(children: [
-        Image.asset("assets/images/${widget.assetName}.png", scale: 0.5),
+        widget.assetName,
         const SizedBox(
           height: 10,
         ),

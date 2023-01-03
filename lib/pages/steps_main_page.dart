@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'dart:async';
 
 import 'package:pedometer/pedometer.dart';
+import 'package:walkerrr/common/armor_variables.dart';
 import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/pages/navto_inv.dart';
 import 'package:walkerrr/pages/navto_shop.dart';
@@ -154,12 +155,14 @@ class MainPedometerState extends State<MainPedometer>
                   'Pedestrian status:',
                   style: TextStyle(fontSize: 30),
                 ),
-                Image.asset(
-                  status == "walking"
-                      ? "assets/images/__Run.gif"
-                      : "assets/images/__Idle.gif",
-                  scale: 0.5,
-                ),
+                // Image.asset(
+                //   status == "walking"
+                //       ? "assets/images/__Run.gif"
+                //       : "assets/images/__Idle.gif",
+                //   scale: 0.5,
+                // ),
+
+                status == "walking" ? WalkingArmorIcons().walkingArmorIconOne : IdleArmorIcons().idleArmorIconOne
               ],
             ),
           ),

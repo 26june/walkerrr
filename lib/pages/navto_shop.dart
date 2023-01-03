@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/armor_variables.dart';
 import 'package:walkerrr/common/single_shopitem.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 
@@ -24,12 +25,12 @@ class _WalkerShopState extends State<WalkerShop> {
       ),
       body: GridView.count(
         crossAxisCount: 2,
-        children: const [
-          SingleShopItem(name: "Pizza", price: 100, assetName: "Pizza"),
-          SingleShopItem(name: "Egg", price: 200, assetName: "Egg"),
-          SingleShopItem(name: "Pancake", price: 200, assetName: "Pancake"),
-          SingleShopItem(name: "Sandwich", price: 200, assetName: "Sandwich"),
-          SingleShopItem(name: "Sushi", price: 200, assetName: "Sushi"),
+        children: [
+          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconOne),
+          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconTwo),
+          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconThree),
+          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconFour),
+          SingleShopItem(name: "Armor", price: 500, assetName: ArmorIcons().armorIconFive),
         ],
       ),
     );
