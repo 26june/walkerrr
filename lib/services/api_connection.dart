@@ -94,7 +94,7 @@ Future<void> patchCoins(uid, increment) async {
 
 Future<void> patchTrophiesToDB(uid, newTrophy) async {
   final url = Uri.http(david, '/api/users/$uid');
-  final currentTrophies = userObject["tropies"];
+  final currentTrophies = userObject["trophies"];
   await http.patch(url,
       headers: {
         'Content-Type': 'application/json',
@@ -104,6 +104,3 @@ Future<void> patchTrophiesToDB(uid, newTrophy) async {
         'trophies': [...currentTrophies, newTrophy]
       }));
 }
-
-// {trophy_name: "hello", achieved_by: "Completing 10000 steps in one day", trophy_img: "https://imgurl.com"}
-// ["hello", "trophy2"]
