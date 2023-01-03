@@ -23,7 +23,14 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
               color: GlobalStyleVariables.invItemBorderColour, width: 5),
           color: GlobalStyleVariables.invItemBackGroundColour),
 
-      child: widget.asset,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          widget.asset,
+          ElevatedButton(onPressed: () {}, child: const Text("Equip"))
+        ],
+      ),
     );
   }
 }
