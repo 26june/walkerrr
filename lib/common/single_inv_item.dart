@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:walkerrr/common/styling_variables.dart';
+import 'package:walkerrr/providers/user_provider.dart';
+import 'package:walkerrr/services/api_connection.dart';
 
 class SingleInventoryItem extends StatefulWidget {
   const SingleInventoryItem(
@@ -13,8 +15,16 @@ class SingleInventoryItem extends StatefulWidget {
 }
 
 class _SingleInventoryItemState extends State<SingleInventoryItem> {
+  bool isButtonActive = true;
+  final currentlyEquipped = userObject['equippedArmour'];
+  String buttonText = "Equip";
+
   @override
   Widget build(BuildContext context) {
+    if (currentlyEquipped == widget.name) {
+      isButtonActive = false;
+      buttonText = "Equipped";
+    }
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -31,7 +41,18 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
         children: [
           widget.asset,
           Text(widget.name),
-          ElevatedButton(onPressed: () {}, child: const Text("Equip"))
+          ElevatedButton(
+              onPressed: isButtonActive
+                  ? () {
+                      setState(() {
+                        patchArmour(userObject['uid'], widget.name);
+                        userObject['equippedArmour'] = widget.name;
+                        isButtonActive = false;
+                        buttonText = "Equipped";
+                      });
+                    }
+                  : null,
+              child: const Text("Equip"))
         ],
       ),
     );
