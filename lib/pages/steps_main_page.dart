@@ -167,10 +167,13 @@ class MainPedometerState extends State<MainPedometer>
                 //   scale: 0.5,
                 // ),
 
-                status == "walking"
-                    ? WalkingArmorIcons()
-                        .getWalkingSprite(getCurrentlyEquipped())
-                    : IdleArmorIcons().getIdleSprite(getCurrentlyEquipped())
+                ValueListenableBuilder(
+                    valueListenable: CurrentEquip.current,
+                    builder: (context, value, child) {
+                      return status == "walking"
+                          ? WalkingArmorIcons().getWalkingSprite(value)
+                          : IdleArmorIcons().getIdleSprite(value);
+                    }),
               ],
             ),
           ),

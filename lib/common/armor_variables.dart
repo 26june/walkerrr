@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/providers/user_provider.dart';
 
 class ArmorIcons {
   var armorIconZero = Image.asset("assets/armors/static-armor/0.gif");
@@ -77,7 +78,7 @@ class WalkingArmorIcons {
 
   var walkingArmorIconFive = Image.asset("assets/armors/walking-armor/5.gif");
 
-  getWalkingSprite(String name) {
+  getWalkingSprite(name) {
     switch (name) {
       case "basic":
         return walkingArmorIconZero;
@@ -93,4 +94,9 @@ class WalkingArmorIcons {
         return walkingArmorIconFive;
     }
   }
+}
+
+class CurrentEquip {
+  static ValueNotifier<String> current =
+      ValueNotifier(userObject['equippedArmour'].toLowerCase());
 }
