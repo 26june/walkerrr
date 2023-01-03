@@ -163,8 +163,8 @@ class MainPedometerState extends State<MainPedometer>
                 // ),
 
                 status == "walking"
-                    ? WalkingArmorIcons().walkingArmorIconOne
-                    : IdleArmorIcons().idleArmorIconOne
+                    ? WalkingArmorIcons().getWalkingSprite("knight")
+                    : IdleArmorIcons().getIdleSprite("knight")
               ],
             ),
           ),
