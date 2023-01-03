@@ -28,7 +28,10 @@ class _WalkerInventoryState extends State<WalkerInventory> {
       backgroundColor: GlobalStyleVariables.invBackgroundColour,
       body: GridView.count(
         crossAxisCount: 5,
-        children: [],
+        children: List.generate(
+            currentTrophies.length,
+            (index) =>
+                SingleInventoryItem(asset: currentTrophies[index]['name'])),
       ),
     );
   }
