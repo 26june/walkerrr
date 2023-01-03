@@ -27,7 +27,6 @@ class ArmorIcons {
         return armorIconFour;
       case "beach":
         return armorIconFive;
-
     }
   }
 }

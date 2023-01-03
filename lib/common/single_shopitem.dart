@@ -18,8 +18,20 @@ class SingleShopItem extends StatefulWidget {
 }
 
 class _SingleShopItemState extends State<SingleShopItem> {
+  bool isButtonActive = true;
+  final currentTrophies = userObject['trophies'];
+  String buttonText = "Buy";
+
   @override
   Widget build(BuildContext context) {
+    if (currentTrophies != null) {
+      currentTrophies.forEach((trophy) => {
+            if (trophy["name"] == widget.name)
+              {isButtonActive = false, buttonText = "Purchased"}
+            else
+              {null}
+          });
+    }
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -36,21 +48,29 @@ class _SingleShopItemState extends State<SingleShopItem> {
           height: 10,
         ),
         ElevatedButton(
-            onPressed: () {
-              final currentCoins = userObject["coins"];
-              if (currentCoins > widget.price) {
-                final newShopItem = {
-                  "name": widget.name,
-                  "price": widget.price
-                };
-                patchTrophiesToDB(userObject['uid'], newShopItem);
-                userObject["coins"] = currentCoins - widget.price;
-                patchCoins(userObject['uid'], -widget.price);
-                final currentTrophies = userObject["trophies"];
-                userObject["trophies"] = [...currentTrophies, newShopItem];
-              }
-            },
-            child: const Text("Buy"))
+            onPressed: isButtonActive
+                ? () {
+                    setState(() {
+                      final currentCoins = userObject["coins"];
+                      if (currentCoins > widget.price) {
+                        final newShopItem = {
+                          "name": widget.name,
+                          "price": widget.price
+                        };
+                        patchTrophiesToDB(userObject['uid'], newShopItem);
+                        userObject["coins"] = currentCoins - widget.price;
+                        patchCoins(userObject['uid'], -widget.price);
+                        final currentTrophies = userObject["trophies"];
+                        userObject["trophies"] = [
+                          ...currentTrophies,
+                          newShopItem
+                        ];
+                        isButtonActive = false;
+                      }
+                    });
+                  }
+                : null,
+            child: Text(buttonText))
       ]),
     );
   }

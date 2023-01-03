@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:walkerrr/common/styling_variables.dart';
 
 class SingleInventoryItem extends StatefulWidget {
-  const SingleInventoryItem({super.key, required this.asset});
+  const SingleInventoryItem(
+      {super.key, required this.asset, required this.name});
 
+  final String name;
   final Widget asset;
 
   @override
@@ -28,6 +30,7 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           widget.asset,
+          Text(widget.name),
           ElevatedButton(onPressed: () {}, child: const Text("Equip"))
         ],
       ),
