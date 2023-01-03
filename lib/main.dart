@@ -44,7 +44,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
           primary: GlobalStyleVariables.secondaryColour,
-        ),),
+        ),
+      ),
       home: const WidgetTree(),
     );
   }

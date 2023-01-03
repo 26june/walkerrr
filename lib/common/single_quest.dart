@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
 import "package:walkerrr/providers/step_provider.dart" as globalSteps;
@@ -65,6 +66,7 @@ class _SingleQuestState extends State<SingleQuest> {
         child: Column(
           children: [
             Text(widget.questTitle),
+            Text("Reward: ${widget.reward}"),
             Text("Progress: ${(progessCalc * 100).toInt()}%"),
             LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 20,
