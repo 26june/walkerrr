@@ -16,21 +16,25 @@ class _WalkerInventoryState extends State<WalkerInventory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text("Inventory"),
-          backgroundColor: GlobalStyleVariables.invAppBarColour),
-      backgroundColor: GlobalStyleVariables.invBackgroundColour,
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(
-          currentTrophies.length,
-          (index) => SingleInventoryItem(
-              name: currentTrophies[index]['name'],
-              asset: ArmorIcons()
-                  .getIcon(currentTrophies[index]['name'].toLowerCase())),
-        ),
-      ),
-    );
+    return ValueListenableBuilder(
+        valueListenable: CurrentEquip.current,
+        builder: (context, value, child) {
+          return Scaffold(
+            appBar: AppBar(
+                title: const Text("Inventory"),
+                backgroundColor: GlobalStyleVariables.invAppBarColour),
+            backgroundColor: GlobalStyleVariables.invBackgroundColour,
+            body: GridView.count(
+              crossAxisCount: 2,
+              children: List.generate(
+                currentTrophies.length,
+                (index) => SingleInventoryItem(
+                    name: currentTrophies[index]['name'],
+                    asset: ArmorIcons()
+                        .getIcon(currentTrophies[index]['name'].toLowerCase())),
+              ),
+            ),
+          );
+        });
   }
 }

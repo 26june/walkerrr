@@ -23,41 +23,49 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (currentlyEquipped == widget.name) {
-      isButtonActive = false;
-      buttonText = "Equipped";
-    }
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      // color: GlobalStyleVariables.invItemBackGroundColour,
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-          border: Border.all(
-              color: GlobalStyleVariables.invItemBorderColour, width: 5),
-          color: GlobalStyleVariables.invItemBackGroundColour),
+    return ValueListenableBuilder(
+        valueListenable: CurrentEquip.current,
+        builder: ((context, value, child) {
+          if (value == widget.name.toLowerCase()) {
+            isButtonActive = false;
+            buttonText = "Equipped";
+          } else {
+            isButtonActive = true;
+            buttonText = "Equip";
+          }
+          return Container(
+            height: double.infinity,
+            width: double.infinity,
+            // color: GlobalStyleVariables.invItemBackGroundColour,
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: GlobalStyleVariables.invItemBorderColour, width: 5),
+                color: GlobalStyleVariables.invItemBackGroundColour),
 
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          widget.asset,
-          Text(widget.name),
-          ElevatedButton(
-              onPressed: isButtonActive
-                  ? () {
-                      setState(() {
-                        patchArmour(userObject['uid'], widget.name);
-                        userObject['equippedArmour'] = widget.name;
-                        buttonText = "Equipped";
-                        isButtonActive = false;
-                      });
-                      CurrentEquip.current.value = widget.name.toLowerCase();
-                    }
-                  : null,
-              child: Text(buttonText))
-        ],
-      ),
-    );
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                widget.asset,
+                Text(widget.name),
+                ElevatedButton(
+                    onPressed: isButtonActive
+                        ? () {
+                            setState(() {
+                              patchArmour(userObject['uid'], widget.name);
+                              userObject['equippedArmour'] = widget.name;
+                              buttonText = "Equipped";
+                              isButtonActive = false;
+                            });
+                            CurrentEquip.current.value =
+                                widget.name.toLowerCase();
+                          }
+                        : null,
+                    child: Text(buttonText))
+              ],
+            ),
+          );
+        }));
   }
 }
