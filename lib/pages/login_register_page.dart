@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> fetchSecureStorageData() async {
     _controllerDisplayName.text = await _secureStorage.getDisplayName() ?? '';
     _controllerEmail.text = await _secureStorage.getEmail() ?? '';
-    _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
+    _controllerPassword.text = await _secureStorage.getPassword() ?? '';
   }
 // <========
 
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!_dontStore) {
       await _secureStorage.setDisplayName(_controllerDisplayName.text);
       await _secureStorage.setEmail(_controllerEmail.text);
-      await _secureStorage.setPassWord(_controllerPassword.text);
+      await _secureStorage.setPassword(_controllerPassword.text);
     }
     try {
       await Auth().signInWithEmailAndPassword(
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!_dontStore) {
       await _secureStorage.setDisplayName(_controllerDisplayName.text);
       await _secureStorage.setEmail(_controllerEmail.text);
-      await _secureStorage.setPassWord(_controllerPassword.text);
+      await _secureStorage.setPassword(_controllerPassword.text);
     }
     try {
       await Auth().createUserWithEmailAndPassword(
@@ -293,9 +293,10 @@ class _LoginPageState extends State<LoginPage> {
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green, foregroundColor: Colors.white),
         onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            if (_isLogin) _submitValidation();
-            {
+          if (_isLogin) {
+            _submitValidation();
+          } else {
+            if (_formKey.currentState!.validate()) {
               if (_passwordConfirm == _password ||
                   _passwordConfirm == _controllerPassword.text) {
                 _submitValidation();
@@ -307,16 +308,16 @@ class _LoginPageState extends State<LoginPage> {
                       content: Text("Re-type both passwords!")),
                 );
               }
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: Colors.red,
+                    content: Text(errorMessage == ""
+                        ? "Check form fields!"
+                        : "Error: $errorMessage!")),
+              );
             }
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  duration: const Duration(seconds: 2),
-                  backgroundColor: Colors.red,
-                  content: Text(errorMessage == ""
-                      ? "Check form fields!"
-                      : "Error: $errorMessage!")),
-            );
           }
         },
         child: Text(_isLogin ? "Login" : "Register"));

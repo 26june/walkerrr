@@ -25,6 +25,45 @@ class _HomePageState extends State<HomePage> {
     return Text(user?.email ?? "User Email");
   }
 
+  Widget _userDisplayName() {
+    return Text(
+        user?.providerData[0].displayName.toString() ?? "User Display Name");
+  }
+
+  Widget _userEmail() {
+    return Text(user?.providerData[0].email.toString() ?? "User Email");
+  }
+
+  Widget _userEmailVerified() {
+    return Text(user?.emailVerified.toString() ?? "User Email Verified");
+  }
+
+  Widget _userPassword() {
+    return Text(user?.providerData[0].providerId.toString() ?? "User Password");
+  }
+
+  Widget _userPhone() {
+    return Text(user?.providerData[0].phoneNumber.toString() ?? "User Phone");
+  }
+
+  Widget _userPhoto() {
+    return Text(user?.providerData[0].photoURL.toString() ?? "User Avatar");
+  }
+
+  Widget _userCreationTime() {
+    return Text(user?.metadata.creationTime
+            ?.toIso8601String()
+            .replaceRange(10, 24, '') ??
+        "User Creation Time");
+  }
+
+  Widget _userLastSignIn() {
+    return Text(user?.metadata.lastSignInTime
+            ?.toIso8601String()
+            .replaceRange(10, 24, '') ??
+        "User Last Sign In");
+  }
+
   final User? user = Auth().currentUser;
 
   Future<void> signOut() async {
@@ -38,16 +77,19 @@ class _HomePageState extends State<HomePage> {
   Future<void> updateUserName() async {
     final newUsername = _controllerDisplayName.text;
     patchUsername(userObject['uid'], newUsername);
+    _secureStorage.setDisplayName(newUsername);
   }
 
   Future<void> updateEmail() async {
     final newEmail = _controllerEmail.text;
     // patchEmail(userObject['email'], newEmail);
+    _secureStorage.setEmail(newEmail);
   }
 
   Future<void> updatePassword() async {
     final newPassword = _controllerPassword.text;
     // patchPassword(userObject['password'], newPassword);
+    _secureStorage.setPassword(newPassword);
   }
 
   // <=============
@@ -85,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchSecureStorageData() async {
     _controllerDisplayName.text = await _secureStorage.getDisplayName() ?? '';
     _controllerEmail.text = await _secureStorage.getEmail() ?? '';
-    _controllerPassword.text = await _secureStorage.getPassWord() ?? '';
+    _controllerPassword.text = await _secureStorage.getPassword() ?? '';
   }
 
 // --------- Form flutter's validators ---------
@@ -150,10 +192,11 @@ class _HomePageState extends State<HomePage> {
 
   // ---- Field current value from onChange ----
   String _displayNameCurrent = '';
-  String _emailCurrent = '';
-  String _passwordCurrent = '';
-  String _passwordConfirmCurrent = '';
+  String _currentEmail = '';
+  String _currentPassword = '';
+  String _currentPasswordConfirm = '';
 
+  String _oldPassword = '';
 // --------- Form fields widgets ---------
 
   Widget _entryFieldDisplayName(
@@ -165,6 +208,7 @@ class _HomePageState extends State<HomePage> {
           if (hasFocus) {
             setState(() {
               isDisplayNameFocused = true;
+              _displayNameCurrent = _controllerDisplayName.text;
             });
           } else {
             setState(() {
@@ -181,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                     isDisplayNameChanged = true;
                     isDisplayNameSaved = false;
                     isFormChanged = true;
-                    _displayNameCurrent = value;
+                    if (value.isNotEmpty) _displayNameCurrent = value;
                   },
                 )
               }),
@@ -250,6 +294,7 @@ class _HomePageState extends State<HomePage> {
           if (hasFocus) {
             setState(() {
               isEmailFocused = true;
+              _currentEmail = _controllerEmail.text;
             });
           } else {
             setState(() {
@@ -266,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                     isEmailChanged = true;
                     isEmailSaved = false;
                     isFormChanged = true;
-                    _emailCurrent = value;
+                    if (value.isNotEmpty) _currentEmail = value;
                   },
                 )
               }),
@@ -310,7 +355,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   saveEmail();
-                  _newEmail = _emailCurrent;
+                  _newEmail = _currentEmail;
                   _controllerEmail.text = _newEmail;
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -333,16 +378,23 @@ class _HomePageState extends State<HomePage> {
     return Focus(
         onFocusChange: (hasFocus) {
           if (hasFocus) {
-            if (isPasswordSaved) {
-              _controllerPassword.text = _newPassword;
-            } else {
-              _controllerPassword.text = '';
-            }
             setState(() {
               isPasswordFocused = true;
+              _oldPassword = _controllerPassword.text;
             });
+            if (_currentPassword.isEmpty) {
+              _controllerPassword.text = '';
+            } else {
+              _controllerPassword.text = _currentPassword;
+            }
           } else {
-            if (isPasswordSaved) _controllerPassword.text = _newPassword;
+            if (!isPasswordChanged && !isPasswordSaved) {
+              _controllerPassword.text = _oldPassword;
+            } else if (isPasswordChanged && !isPasswordSaved) {
+              _controllerPassword.text = _currentPassword;
+            } else if (isPasswordChanged && isPasswordSaved) {
+              _controllerPassword.text = _newPassword;
+            }
             setState(() {
               isPasswordFocused = false;
             });
@@ -353,15 +405,18 @@ class _HomePageState extends State<HomePage> {
           obscureText: isObscure,
           validator: _passwordValidator,
           onChanged: ((value) => {
-                setState(
-                  () {
-                    isPasswordChanged = true;
-                    isPasswordConfirmEditingEnabled = true;
-                    isFormChanged = true;
-                    isPasswordSaved = false;
-                    _passwordCurrent = value;
-                  },
-                )
+                if (value.isNotEmpty)
+                  {
+                    setState(
+                      () {
+                        isPasswordChanged = true;
+                        isPasswordConfirmEditingEnabled = true;
+                        isPasswordSaved = false;
+                        isFormChanged = true;
+                        _currentPassword = value;
+                      },
+                    ),
+                  }
               }),
           controller: _controllerPassword,
           cursorColor: GlobalStyleVariables.secondaryColour,
@@ -436,7 +491,7 @@ class _HomePageState extends State<HomePage> {
                   () {
                     isPasswordConfirmChanged = true;
                     isPasswordSaved = false;
-                    _passwordConfirmCurrent = value;
+                    _currentPasswordConfirm = value;
                   },
                 )
               }),
@@ -477,9 +532,9 @@ class _HomePageState extends State<HomePage> {
                       : Icons.toggle_off_outlined),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  if (_passwordConfirmCurrent == _passwordCurrent) {
+                  if (_currentPasswordConfirm == _currentPassword) {
                     savePassword();
-                    _newPassword = _passwordCurrent;
+                    _newPassword = _currentPassword;
                     _controllerPassword.text = _newPassword;
                     _controllerPasswordConfirm.text = '';
                   } else {
@@ -581,7 +636,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   // ---- Resetting states after canceling/closing edit mode ----
-  void cancelEditing() {
+  void cancelEditing() async {
+    fetchSecureStorageData();
+
     setState(() {
       isDisplayNameEditingEnabled = false;
       isEmailEditingEnabled = false;
@@ -591,7 +648,17 @@ class _HomePageState extends State<HomePage> {
       isEmailSaved = true;
       isPasswordSaved = true;
       isFormEditingEnabled = false;
+      isDisplayNameFocused = false;
+      isEmailFocused = false;
+      isPasswordFocused = false;
+      isPasswordConfirmFocused = false;
       isObscure = true;
+      _newDisplayName = '';
+      _newEmail = '';
+      _newPassword = '';
+      _currentPassword = '';
+      _currentPasswordConfirm = '';
+      _oldPassword = '';
     });
   }
 
@@ -648,10 +715,6 @@ class _HomePageState extends State<HomePage> {
     setState(() => {
           isFormSaved = true,
           isFormEditingEnabled = false,
-          isDisplayNameFocused = false,
-          isEmailFocused = false,
-          isPasswordFocused = false,
-          isPasswordConfirmFocused = false,
         });
     cancelEditing();
   }
@@ -687,8 +750,47 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 24,
                       ),
                     ),
-                    const Text('Email from firebase:'),
-                    _userUid(),
+                    const Text('Data from Firebase:'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text('Display Name:'),
+                        _userDisplayName(),
+                        const Text('Email:'),
+                        _userEmail(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text('Email verified:'),
+                        _userEmailVerified(),
+                        const Text('Password:'),
+                        _userPassword(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text('User Phone:'),
+                        _userPhone(),
+                        const Text('User Photo:'),
+                        _userPhoto(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text('Creation date:'),
+                        _userCreationTime(),
+                        const Text('Last SignIn:'),
+                        _userLastSignIn(),
+                      ],
+                    ),
                     const SizedBox(
                       width: double.infinity,
                       height: 20,
@@ -751,7 +853,8 @@ class _HomePageState extends State<HomePage> {
                         label: const Text('Save Changes'),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            if (_passwordConfirmCurrent == _passwordCurrent) {
+                            if (!isPasswordChanged ||
+                                _currentPasswordConfirm == _currentPassword) {
                               saveChanges();
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
