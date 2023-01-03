@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/armor_variables.dart';
 import 'package:walkerrr/common/single_inv_item.dart';
 import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/user_provider.dart';
@@ -19,38 +20,15 @@ class _WalkerInventoryState extends State<WalkerInventory> {
           backgroundColor: GlobalStyleVariables.invAppBarColour),
       backgroundColor: GlobalStyleVariables.invBackgroundColour,
       body: GridView.count(
-        crossAxisCount: 5,
-        children: const [
+        crossAxisCount: 2,
+        children: [
           SingleInventoryItem(
-            asset: "assets/images/Egg.png",
+            asset: ArmorIcons().getIcon("ninja"),
           ),
           SingleInventoryItem(
-            asset: "assets/images/Egg.png",
+            asset: ArmorIcons().getIcon("knight"),
           ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
-          SingleInventoryItem(
-            asset: "assets/images/Egg.png",
-          ),
+
         ],
       ),
     );

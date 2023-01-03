@@ -4,7 +4,7 @@ import 'package:walkerrr/common/styling_variables.dart';
 class SingleInventoryItem extends StatefulWidget {
   const SingleInventoryItem({super.key, required this.asset});
 
-  final String asset;
+  final Widget asset;
 
   @override
   State<SingleInventoryItem> createState() => _SingleInventoryItemState();
@@ -24,7 +24,14 @@ class _SingleInventoryItemState extends State<SingleInventoryItem> {
         
       ),
 
-      child: Image.asset(widget.asset),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          widget.asset,
+          ElevatedButton(onPressed: () {}, child: const Text("Equip"))
+        ],
+      ),
     );
   }
 }
