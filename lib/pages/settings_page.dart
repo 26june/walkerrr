@@ -21,49 +21,8 @@ class _HomePageState extends State<HomePage> {
 
 // ==================== User MongoDB data edit ====================>
 
-// ---- Firebase User Data check ----
-
   // Widget _userUid() {
   //   return Text(user?.email ?? "User Email");
-  // }
-
-  // Widget _userDisplayName() {
-  //   return Text(
-  //       user?.providerData[0].displayName.toString() ?? "User Display Name");
-  // }
-
-  // Widget _userEmail() {
-  //   return Text(user?.providerData[0].email.toString() ?? "User Email");
-  // }
-
-  // Widget _userEmailVerified() {
-  //   return Text(user?.emailVerified.toString() ?? "User Email Verified");
-  // }
-
-  // Widget _userPassword() {
-  //   return Text(user?.providerData[0].providerId.toString() ?? "User Password");
-  // }
-
-  // Widget _userPhone() {
-  //   return Text(user?.providerData[0].phoneNumber.toString() ?? "User Phone");
-  // }
-
-  // Widget _userPhoto() {
-  //   return Text(user?.providerData[0].photoURL.toString() ?? "User Avatar");
-  // }
-
-  // Widget _userCreationTime() {
-  //   return Text(user?.metadata.creationTime
-  //           ?.toIso8601String()
-  //           .replaceRange(10, 24, '') ??
-  //       "User Creation Time");
-  // }
-
-  // Widget _userLastSignIn() {
-  //   return Text(user?.metadata.lastSignInTime
-  //           ?.toIso8601String()
-  //           .replaceRange(10, 24, '') ??
-  //       "User Last Sign In");
   // }
 
   final User? user = Auth().currentUser;
@@ -732,155 +691,170 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    print(height);
     List<Widget> _pages = <Widget>[
       const MainPedometer(), //Page 0
       const QuestList(),
       // Page 2
       SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(16),
+          color: Colors.green[50],
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height - 145,
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // --- Header ---
-                Column(
-                  children: [
-                    const Text(
-                      'Welcome to Walkerrr',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ],
-                ),
-                // --- Form fields ---
-                Form(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // --- displayName form entry ---
+                      // --- Header ---
                       Container(
-                        height: 80,
-                        width: double.infinity,
-                        child: _entryFieldDisplayName(
-                            "New display name", _controllerDisplayName),
-                      ),
-                      // --- email form entry ---
-                      Container(
-                        height: 80,
-                        width: double.infinity,
-                        child: _entryFieldEmail("Your email", _controllerEmail),
-                      ),
-                      // --- password form entry ---
-                      Container(
-                        height: 80,
-                        width: double.infinity,
-                        child: _entryFieldPassword(
-                            "Enter password", _controllerPassword),
-                      ),
-                      // --- passwordConfirm form entry ---
-                      Visibility(
-                        visible: isPasswordConfirmEditingEnabled,
-                        child: Container(
-                            height: 80,
-                            width: double.infinity,
-                            child: _entryFieldPasswordConfirm(
-                                "Re-type password",
-                                _controllerPasswordConfirm)),
-                      ),
-                    ],
-                  ),
-                ),
-                // --- saveAll button ---
-                Visibility(
-                  visible: isFormChanged && isFormEditingEnabled,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      OutlinedButton.icon(
-                        icon: const Icon(
-                          color: Colors.green,
-                          Icons.save_outlined,
-                          size: 24.0,
-                        ),
-                        label: const Text(
-                          'Save Changes',
+                        height: 60,
+                        child: const Text(
+                          'Welcome to Walkerrr',
                           style: TextStyle(
-                            color: Colors.green,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                            fontSize: 24,
                           ),
                         ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            if (!isPasswordChanged ||
-                                _currentPasswordConfirm == _currentPassword) {
-                              saveChanges();
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    duration: Duration(seconds: 2),
-                                    backgroundColor: Colors.red,
-                                    content: Text("Passwords are not equal!")),
-                              );
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  duration: Duration(seconds: 2),
-                                  backgroundColor: Colors.red,
-                                  content:
-                                      Text("Check form fields before saving!")),
-                            );
-                          }
-                        },
+                      ),
+                      // --- Form fields ---
+                      Form(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // --- displayName form entry ---
+                            Container(
+                              height: 80,
+                              width: double.infinity,
+                              child: _entryFieldDisplayName(
+                                  "New display name", _controllerDisplayName),
+                            ),
+                            // --- email form entry ---
+                            Container(
+                              height: 80,
+                              width: double.infinity,
+                              child: _entryFieldEmail(
+                                  "Your email", _controllerEmail),
+                            ),
+                            // --- password form entry ---
+                            Container(
+                              height: 80,
+                              width: double.infinity,
+                              child: _entryFieldPassword(
+                                  "Enter password", _controllerPassword),
+                            ),
+                            // --- passwordConfirm form entry ---
+                            Visibility(
+                              visible: isPasswordConfirmEditingEnabled,
+                              child: Container(
+                                  height: 80,
+                                  width: double.infinity,
+                                  child: _entryFieldPasswordConfirm(
+                                      "Re-type password",
+                                      _controllerPasswordConfirm)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // --- saveAll button ---
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        child: Visibility(
+                          visible: isFormChanged && isFormEditingEnabled,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              OutlinedButton.icon(
+                                icon: const Icon(
+                                  color: Colors.green,
+                                  Icons.save_outlined,
+                                  size: 24.0,
+                                ),
+                                label: const Text(
+                                  'Save Changes',
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (!isPasswordChanged ||
+                                        _currentPasswordConfirm ==
+                                            _currentPassword) {
+                                      saveChanges();
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                                "Passwords are not equal!")),
+                                      );
+                                    }
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              "Check form fields before saving!")),
+                                    );
+                                  }
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]),
+              ),
+              Visibility(
+                // --- delete Account button ---
+                visible: isFormEditingEnabled,
+                child: Container(
+                  color: Colors.red[100],
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('DANGER ZONE:',
+                          style: TextStyle(
+                              color: Colors.red[600],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                      OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        icon: const Icon(
+                          Icons.delete_forever_outlined,
+                          color: Colors.white,
+                          size: 20.0,
+                        ),
+                        label: const Text('Delete Account',
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: (() => deleteUser()),
                       )
                     ],
                   ),
                 ),
-                const SizedBox(
-                  width: double.infinity,
-                  height: 140,
-                ),
-                // --- delete Account button ---
-                Visibility(
-                  visible: isFormEditingEnabled,
-                  child: Container(
-                    color: Colors.red[100],
-                    padding: const EdgeInsets.all(6),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('DANGER ZONE:',
-                            style: TextStyle(
-                                color: Colors.red[600],
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18)),
-                        OutlinedButton.icon(
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          icon: const Icon(
-                            Icons.delete_forever_outlined,
-                            color: Colors.white,
-                            size: 20.0,
-                          ),
-                          label: const Text('Delete Account',
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: (() => deleteUser()),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
+              ),
+            ],
+          ),
         ),
       ),
     ];

@@ -450,6 +450,7 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: GlobalStyleVariables.secondaryColour,
         ),
         body: Container(
+          color: Colors.green[50],
           height: double.infinity,
           width: double.infinity,
           padding: const EdgeInsets.all(20),
