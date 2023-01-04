@@ -714,7 +714,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       // --- Header ---
                       Container(
-                        height: 60,
+                        height: 50,
                         child: const Text(
                           'Welcome to Walkerrr',
                           style: TextStyle(
