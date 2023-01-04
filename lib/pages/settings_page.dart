@@ -23,18 +23,18 @@ class _HomePageState extends State<HomePage> {
 
 // ---- Firebase User Data check ----
 
-  Widget _userUid() {
-    return Text(user?.email ?? "User Email");
-  }
+  // Widget _userUid() {
+  //   return Text(user?.email ?? "User Email");
+  // }
 
-  Widget _userDisplayName() {
-    return Text(
-        user?.providerData[0].displayName.toString() ?? "User Display Name");
-  }
+  // Widget _userDisplayName() {
+  //   return Text(
+  //       user?.providerData[0].displayName.toString() ?? "User Display Name");
+  // }
 
-  Widget _userEmail() {
-    return Text(user?.providerData[0].email.toString() ?? "User Email");
-  }
+  // Widget _userEmail() {
+  //   return Text(user?.providerData[0].email.toString() ?? "User Email");
+  // }
 
   // Widget _userEmailVerified() {
   //   return Text(user?.emailVerified.toString() ?? "User Email Verified");
@@ -52,19 +52,19 @@ class _HomePageState extends State<HomePage> {
   //   return Text(user?.providerData[0].photoURL.toString() ?? "User Avatar");
   // }
 
-  Widget _userCreationTime() {
-    return Text(user?.metadata.creationTime
-            ?.toIso8601String()
-            .replaceRange(10, 24, '') ??
-        "User Creation Time");
-  }
+  // Widget _userCreationTime() {
+  //   return Text(user?.metadata.creationTime
+  //           ?.toIso8601String()
+  //           .replaceRange(10, 24, '') ??
+  //       "User Creation Time");
+  // }
 
-  Widget _userLastSignIn() {
-    return Text(user?.metadata.lastSignInTime
-            ?.toIso8601String()
-            .replaceRange(10, 24, '') ??
-        "User Last Sign In");
-  }
+  // Widget _userLastSignIn() {
+  //   return Text(user?.metadata.lastSignInTime
+  //           ?.toIso8601String()
+  //           .replaceRange(10, 24, '') ??
+  //       "User Last Sign In");
+  // }
 
   final User? user = Auth().currentUser;
 
@@ -754,31 +754,6 @@ class _HomePageState extends State<HomePage> {
                         letterSpacing: 0.5,
                         fontSize: 24,
                       ),
-                    ),
-                    const Text('Data from Firebase:'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text('Display Name:'),
-                        _userDisplayName(),
-                        const Text('Email:'),
-                        _userEmail(),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text('Creation date:'),
-                        _userCreationTime(),
-                        const Text('Last SignIn:'),
-                        _userLastSignIn(),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 30,
                     ),
                   ],
                 ),
