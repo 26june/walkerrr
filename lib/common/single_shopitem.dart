@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/armor_variables.dart';
 import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/user_provider.dart';
 import 'package:walkerrr/services/api_connection.dart';
@@ -53,7 +54,7 @@ class _SingleShopItemState extends State<SingleShopItem> {
                     ? () {
                         setState(() {
                           final currentCoins = userObject["coins"];
-                          if (currentCoins > widget.price) {
+                          if (CurrentCoins.currentCoins.value > widget.price) {
                             final newShopItem = {
                               "name": widget.name,
                               "price": widget.price
@@ -66,6 +67,9 @@ class _SingleShopItemState extends State<SingleShopItem> {
                               ...currentTrophies,
                               newShopItem
                             ];
+                            CurrentCoins.currentCoins.value -= 500;
+
+                            buttonText = "Purchased";
                             isButtonActive = false;
                           }
                         });

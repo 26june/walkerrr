@@ -26,6 +26,7 @@ class MainPedometerState extends State<MainPedometer>
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String status = '?', steps = '?';
+  bool stepsInitialized = false;
 
   @override
   void initState() {
@@ -38,6 +39,12 @@ class MainPedometerState extends State<MainPedometer>
     setState(() {
       steps = event.steps.toString();
       global.StepsContext().updateGlobalSteps(event.steps);
+
+      if (stepsInitialized == false) {
+        stepsInitialized = true;
+      } else {
+        CurrentSteps.currentSteps.value++;
+      }
     });
   }
 
@@ -151,10 +158,16 @@ class MainPedometerState extends State<MainPedometer>
                   'Steps taken:',
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
-                Text(
-                  steps,
-                  style: const TextStyle(fontSize: 48, color: Colors.white),
-                ),
+                ValueListenableBuilder(
+                    valueListenable: CurrentSteps.currentSteps,
+                    builder: ((context, value, child) {
+                      print(value);
+                      return Text(
+                        value.toString(),
+                        style:
+                            const TextStyle(fontSize: 48, color: Colors.white),
+                      );
+                    })),
 
                 const SizedBox(
                   height: 50,
@@ -170,8 +183,16 @@ class MainPedometerState extends State<MainPedometer>
                     valueListenable: CurrentEquip.current,
                     builder: (context, value, child) {
                       return status == "walking"
-                          ? WalkingArmorIcons().getWalkingSprite(value)
-                          : IdleArmorIcons().getIdleSprite(value);
+                          ? SizedBox(
+                              height: 300,
+                              width: double.infinity,
+                              child:
+                                  WalkingArmorIcons().getWalkingSprite(value),
+                            )
+                          : SizedBox(
+                              height: 300,
+                              width: double.infinity,
+                              child: IdleArmorIcons().getIdleSprite(value));
                     }),
               ],
             ),

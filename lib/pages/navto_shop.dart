@@ -27,7 +27,11 @@ class _WalkerShopState extends State<WalkerShop> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Shop'),
-            Text('Coins: ${userObject["coins"]}'),
+            ValueListenableBuilder(
+                valueListenable: CurrentCoins.currentCoins,
+                builder: ((context, value, child) {
+                  return Text('Coins: $value');
+                }))
           ],
         ),
       ),

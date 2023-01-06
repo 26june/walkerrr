@@ -112,3 +112,11 @@ class CurrentEquip {
   static ValueNotifier<String> current =
       ValueNotifier(userObject['equippedArmour'].toLowerCase());
 }
+
+class CurrentSteps {
+  static ValueNotifier<int> currentSteps = ValueNotifier(0);
+}
+
+class CurrentCoins {
+  static ValueNotifier<int> currentCoins = ValueNotifier(100);
+}

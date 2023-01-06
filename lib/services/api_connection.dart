@@ -5,8 +5,8 @@ import 'package:walkerrr/providers/user_provider.dart';
 const baseAPI = 'https://walking-backend.onrender.com';
 
 const eddy = '192.168.1.25:9095';
-const david = '192.168.0.47:9095';
-const gj = '192.168.1.13:9095';
+const gj = '192.168.0.47:9095';
+const david = '192.168.1.13:9095';
 
 Future<void> postUser(postedEmail, uid, displayname) async {
   final url = Uri.http(david, '/api/users');

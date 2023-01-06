@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:walkerrr/common/armor_variables.dart';
+import 'package:walkerrr/common/presentation_singlequest.dart';
 import 'package:walkerrr/common/single_quest.dart';
 import 'package:walkerrr/common/styling_variables.dart';
 import 'package:walkerrr/providers/step_provider.dart' as globalSteps;
@@ -68,70 +70,29 @@ class _QuestListState extends State<QuestList> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ListView(
-          children: [
-            SingleQuest(
-              questTitle: "Walk 50 Steps",
-              questGoal: 50,
-              questOffset: findOffset("Walk 50 Steps"),
-              questCurrent: getCurrent("Walk 50 Steps"),
-              questStart: startTime("Walk 50 Steps"),
-              reward: 1000000,
-              completed: false,
-            ),
-            const Divider(
-              thickness: 3.0,
-            ),
-            SingleQuest(
-              questTitle: "Walk 500 Steps",
-              questGoal: 500,
-              questOffset: findOffset("Walk 500 Steps"),
-              questCurrent: getCurrent("Walk 500 Steps"),
-              questStart: startTime("Walk 500 Steps"),
-              reward: 50,
-              completed: false,
-            ),
-            const Divider(
-              thickness: 3.0,
-            ),
-            SingleQuest(
-              questTitle: "Walk 2500 Steps",
-              questGoal: 2500,
-              questOffset: findOffset("Walk 2500 Steps"),
-              questCurrent: getCurrent("Walk 2500 Steps"),
-              questStart: startTime("Walk 2500 Steps"),
-              reward: 500,
-              completed: false,
-            ),
-            const Divider(
-              thickness: 3.0,
-            ),
-            SingleQuest(
-              questTitle: "Walk 5000 Steps",
-              questGoal: 5000,
-              questOffset: findOffset("Walk 5000 Steps"),
-              questCurrent: getCurrent("Walk 5000 Steps"),
-              questStart: startTime("Walk 5000 Steps"),
-              reward: 1000,
-              completed: false,
-            ),
-            const Divider(
-              thickness: 3.0,
-            ),
-            SingleQuest(
-              questTitle: "Walk 10000 Steps",
-              questGoal: 10000,
-              questOffset: findOffset("Walk 10000 Steps"),
-              questCurrent: getCurrent("Walk 10000 Steps"),
-              questStart: startTime("Walk 10000 Steps"),
-              reward: 2500,
-              completed: false,
-            ),
-            const Divider(
-              thickness: 3.0,
-            ),
-          ],
-        ),
+        child: ValueListenableBuilder(
+            valueListenable: CurrentSteps.currentSteps,
+            builder: ((context, value, child) {
+              return ListView(
+                children: [
+                  PresentationSingleQuest(
+                      questTitle: "Walk 10 Steps",
+                      questGoal: 10,
+                      questCurrent: value,
+                      questReward: 4000),
+                  PresentationSingleQuest(
+                      questTitle: "Walk 5000 Steps",
+                      questGoal: 5000,
+                      questCurrent: value,
+                      questReward: 500),
+                  PresentationSingleQuest(
+                      questTitle: "Walk 10000 Steps",
+                      questGoal: 5000,
+                      questCurrent: value,
+                      questReward: 1000)
+                ],
+              );
+            })),
       ),
     );
   }

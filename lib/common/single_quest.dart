@@ -97,6 +97,7 @@ class _SingleQuestState extends State<SingleQuest> {
                           patchQuestsToDB(userObject['uid'], newQuest);
                           final currentQuests = userObject["quests"];
                           userObject["quests"] = [...currentQuests, newQuest];
+                          buttonText = "Quest Active";
                           isButtonActive = false;
                         });
                       }
